@@ -1,8 +1,8 @@
 {
-  "name": "homepage-builder",
+  "name": "@knovator/homepage-builder",
   "version": "0.1.0",
   "license": "MIT",
-  "author": "chavda-bhavik",
+  "author": "chavda-bhavik (knovator)",
   "main": "dist/index.js",
   "module": "dist/homepage-builder.esm.js",
   "typings": "dist/index.d.ts",
@@ -48,5 +48,19 @@
       "path": "dist/homepage-builder.esm.js",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.0.0",
+    "@tsconfig/create-react-app": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "dts-cli": "^1.5.2",
+    "husky": "^8.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "size-limit": "^8.0.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
+  }
 }
