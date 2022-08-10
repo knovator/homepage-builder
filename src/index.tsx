@@ -1,6 +1,5 @@
 import * as React from 'react';
+import "./styles/index.css";
+import { Widget } from "./components/Widget";
 
-// Delete me
-export const Thing = () => {
-  return <div>Welcome to your first test package.</div>;
-};
+export { Widget };

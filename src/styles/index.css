@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    /* Buttons */
+    .khb_btn {
+        @apply rounded-lg font-medium text-center m-1 focus:outline-none focus:ring-4;
+    }
+    .khb_btn-primary {
+        @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+    }
+    .khb_btn-secondary {
+        @apply text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700
+    }
+    .khb_btn-success {
+        @apply text-white bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800
+    }
+    .khb_btn-danger {
+        @apply text-white bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900
+    }
+
+    .khb_btn-xs {
+        @apply text-xs px-1.5 py-1
+    }
+    .khb_btn-sm {
+        @apply text-sm px-3 py-2;
+    }
+    .khb_btn-base {
+        @apply text-sm px-4 py-2.5;
+    }
+    .khb_btn-lg {
+        @apply text-lg px-5 py-3;
+    }
+    /* \ End of Buttons */
+
+    /* Table */
+    .khb_table-wrapper {
+        @apply overflow-x-auto relative shadow-md sm:rounded-lg;
+    }
+    .khb_table {
+        @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+    }
+    .khb_table-thead {
+        @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+    }
+    .khb_table-heading {
+        @apply py-3 px-6;
+    }
+    .khb_table-row {
+        @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+    }
+    .khb_table-row-heading {
+        @apply py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white;
+    }
+    .khb_table-row-data {
+        @apply py-4 px-6;
+    }
+    .khb_table-row-actions {
+        @apply p-0.5;
+    }
+    /* \ End of Table */
+
+    /* Pagination */
+    .khb_pagination {
+        @apply flex justify-between items-center py-2 px-5;
+    }
+    .khb_pagination-total {
+        @apply text-sm font-normal text-gray-500 dark:text-gray-400;
+    }
+    .khb_pagination-total-showing {
+        @apply font-semibold text-gray-900 dark:text-white;
+    }
+    .khb_pagination-total-items {
+        @apply font-semibold text-gray-900 dark:text-white;
+    }
+    .khb_pagination-actions {
+        @apply inline-flex items-center -space-x-px;
+    }
+    .khb_pagination-pager {
+        @apply flex flex-row items-center px-1;
+    }
+    .khb_pagination-pager input {
+        @apply my-2 w-16;
+    }
+    /* \ End of Pagination */
+
+    /* Input */
+    .khb_input {
+        @apply bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none;
+    }
+    .khb_input-xs {
+        @apply text-sm p-1.5;
+    }
+    .khb_input-sm {
+        @apply text-sm p-2;
+    }
+    .khb_input-base {
+        @apply text-base p-2.5;
+    }
+    .khb_input-label {
+        @apply block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300;
+    }
+    /* \ End of Input */
+
+    /* Utility */
+    .khb_sr-only {
+        @apply sr-only;
+    }
+    /* \ End of Utility */
+
+}
