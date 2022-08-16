@@ -1,9 +1,20 @@
 import React from "react";
 import classNames from "classnames";
 
-const Button = ({ type = "primary", size = "base", onClick = () => {}, children }: ButtonProps) => {
+const Button = ({
+	type = "primary",
+	size = "base",
+	onClick = () => {},
+	className,
+	children,
+	disabled,
+}: ButtonProps) => {
 	return (
-		<button className={classNames("khb_btn", `khb_btn-${type}`, `khb_btn-${size}`)} onClick={onClick}>
+		<button
+			className={classNames("khb_btn", `khb_btn-${type}`, `khb_btn-${size}`, className)}
+			onClick={onClick}
+			disabled={disabled}
+		>
 			{children}
 		</button>
 	);

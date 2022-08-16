@@ -2,6 +2,8 @@ const DEFAULT_OFFSET_PAYLOAD = 0;
 const DECIMAL_REDIX = 10;
 const DEFAULT_CURRENT_PAGE = 1;
 const INTERNAL_ERROR_CODE = "INTERNAL_ERROR";
+const DEFAULT_LIMIT = 10;
+const PAGE_LIMITS = [10, 20, 30];
 
 enum CALLBACK_CODES {
 	"GET_ALL" = "GET_ALL",
@@ -38,6 +40,27 @@ const TRANSLATION_PAIRS_COMMON = {
 	indicatesRequired: "Indicates fields are required",
 };
 
+const TRANSLATION_PAIRS_WIDGET = {
+	"widget.name": "Name",
+	"widget.namePlaceholder": "Enter name",
+	"widget.type": "Type",
+	"widget.code": "Code",
+	"widget.codePlaceholder": "Enter code",
+	"widget.webPerRow": "Web Per Row",
+	"widget.webPerRowPlaceholder": "Enter web per row",
+	"widget.mobilePerRow": "Mobile Per Row",
+	"widget.mobilePerRowPlaceholder": "Enter mobile per row",
+};
+const TRANSLATION_PAIRS_TILES = {
+	"tile.title": "Title",
+	"tile.titlePlaceholder": "Enter title",
+	"tile.altText": "Alt Text",
+	"tile.altTextPlaceholder": "Enter alt text",
+	"tile.link": "Link",
+	"tile.linkPlaceholder": "Enter link",
+	"tile.image": "Image",
+};
+
 export {
 	CALLBACK_CODES,
 	DECIMAL_REDIX,
@@ -46,4 +69,8 @@ export {
 	INTERNAL_ERROR_CODE,
 	DEFAULT_PERMISSIONS,
 	TRANSLATION_PAIRS_COMMON,
+	DEFAULT_LIMIT,
+	PAGE_LIMITS,
+	TRANSLATION_PAIRS_WIDGET,
+	TRANSLATION_PAIRS_TILES,
 };
