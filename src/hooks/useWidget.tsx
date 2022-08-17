@@ -71,7 +71,7 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 				routes,
 				action: formState === "ADD" ? "CREATE" : "UPDATE",
 				prefix: widgetRoutesPrefix,
-				id: itemData?.id,
+				id: itemData?._id,
 			});
 			let response = await request({
 				baseUrl,

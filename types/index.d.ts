@@ -51,7 +51,7 @@ interface WidgetContextType {
 	// Table
 	// sortable: boolean;
 	columns: ColumnsSchema;
-	data: any[];
+	data: any;
 	loader?: JSX.Element;
 	canDelete?: boolean;
 }
@@ -127,7 +127,7 @@ interface SchemaType {
 	validations?: import("react-hook-form").RegisterOptions;
 	editable?: boolean;
 	onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file";
+	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file" | "url";
 	options?: { value: string; label: string }[];
 	defaultValue?: string | number | boolean;
 	placeholder?: string;

@@ -94,6 +94,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 					// 	break;
 					case "text":
 					case "number":
+					case "url":
 					default:
 						input = (
 							<Input

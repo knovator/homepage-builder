@@ -50,6 +50,8 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.webPerRowPlaceholder": "Enter web per row",
 	"widget.mobilePerRow": "Mobile Per Row",
 	"widget.mobilePerRowPlaceholder": "Enter mobile per row",
+	"widget.webItems": "Web Items",
+	"widget.mobileItems": "Mobile Items",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",
