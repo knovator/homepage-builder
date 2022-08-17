@@ -13,6 +13,9 @@
     .khb_btn-primary {
         @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
     }
+    .khb_btn-primary:disabled {
+        @apply bg-blue-800;
+    }
     .khb_btn-secondary:disabled {
         @apply bg-gray-100;
     }
@@ -99,7 +102,7 @@
         @apply bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed;
     }
     .khb_input-error {
-        @apply mt-2 text-sm text-red-600 dark:text-red-500;
+        @apply text-sm text-red-600 dark:text-red-500;
     }
     .khb_input-xs {
         @apply text-sm p-1.5;
@@ -210,4 +213,57 @@
     }
     /* \ End of Accordian */
 
+    /* Modal */
+    .khb_modal-wrapper-1 {
+        @apply fixed inset-0 z-20 overflow-y-auto;
+    }
+    .khb_modal-wrapper-2 {
+        @apply flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0 relative;
+    }
+    .khb_modal-backdrop {
+        @apply absolute inset-0 transition-opacity bg-black bg-opacity-75 backdrop-blur-sm;
+    }
+    .khb_modal-container-1 {
+        @apply opacity-100 min-h-screen flex justify-center items-center;
+    }
+    .khb_modal-container-2 {
+        @apply inline-block overflow-hidden text-left align-bottom transition-all transform shadow-xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full rounded-lg;
+    }
+    .khb_modal-main {
+        @apply bg-white;
+    }
+    .khb_modal-header {
+        @apply relative p-4 pb-4 border-b border-gray-200;
+    }
+    .khb_modal-title {
+        @apply text-sm font-semibold;
+    }
+    .khb_modal-close {
+        @apply absolute right-5 top-5 focus:outline-none;
+    }
+    .khb_modal-content {
+        @apply p-4;
+    }
+    /* \ End of Modal */
+
+    /* Delete Modal */
+    .kms_delete-header {
+        @apply py-2 px-4 rounded-lg flex items-center gap-3 text-black text-sm bg-red-200;
+    }
+    .kms_delete-content {
+        @apply mt-3 text-black text-sm;
+    }
+    .kms_delete-note {
+        @apply mt-3;
+    }
+    .kms_delete-actions {
+        @apply mt-3 flex flex-row gap-3;
+    }
+    .kms_delete-input {
+        @apply w-full flex-grow;
+    }
+    .kms_delete-buttons {
+        @apply col-span-3;
+    }
+    /* \ End of Delete Modal */
 }

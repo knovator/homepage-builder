@@ -1,7 +1,6 @@
 import React, { forwardRef, MutableRefObject, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { TRANSLATION_PAIRS_COMMON } from "../../../constants/common";
 import { isEmpty } from "../../../helper/utils";
 import Input from "../Input";
 
@@ -9,16 +8,13 @@ interface FormProps {
 	schema: SchemaType[];
 	data?: any;
 	isUpdating?: boolean;
-	indicatesRequired?: string;
 	onSubmit: (data: any) => void;
+	enable?: boolean;
 	ref: MutableRefObject<HTMLFormElement | null>;
 }
 
 const Form = forwardRef<HTMLFormElement | null, FormProps>(
-	(
-		{ schema, onSubmit, data, isUpdating = false, indicatesRequired = TRANSLATION_PAIRS_COMMON.indicatesRequired },
-		ref,
-	) => {
+	({ schema, onSubmit, data, isUpdating = false, enable = true }, ref) => {
 		const {
 			register,
 			formState: { errors },
@@ -55,17 +51,6 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			let input;
 			if (schema.type) {
 				switch (schema.type) {
-					// case "checkbox":
-					// 	input = (
-					// 		<Input.Checkbox
-					// 			error={errors[schema.accessor]?.message}
-					// 			label={schema.label}
-					// 			rest={register(schema.accessor, schema.validations || {})}
-					// 			className="block"
-					// 			disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
-					// 		/>
-					// 	);
-					// 	break;
 					case "select":
 						input = (
 							<Input.Select
@@ -74,24 +59,14 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								error={errors[schema.accessor]?.message?.toString()}
 								rest={register(schema.accessor, schema.validations || {})}
 								className="w-full"
-								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
+								disabled={
+									(isUpdating && typeof schema.editable !== "undefined" && !schema.editable) ||
+									!enable
+								}
 								required={schema.required}
 							/>
 						);
 						break;
-					// case "textarea":
-					// 	input = (
-					// 		<Input.Textarea
-					// 			error={errors[schema.accessor]?.message}
-					// 			label={schema.label}
-					// 			rest={register(schema.accessor, schema.validations || {})}
-					// 			onInput={schema.onInput}
-					// 			disabled={isUpdating && schema.editable}
-					// 			className="w-full p-2"
-					// 			placeholder={schema.placeholder}
-					// 		/>
-					// 	);
-					// 	break;
 					case "text":
 					case "number":
 					case "url":
@@ -100,12 +75,14 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 							<Input
 								rest={register(schema.accessor, schema.validations || {})}
 								label={schema.label}
-								// onInput={schema.onInput}
 								error={errors[schema.accessor]?.message?.toString()}
 								type={schema.type}
 								className="w-full p-2"
 								placeholder={schema.placeholder}
-								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
+								disabled={
+									(isUpdating && typeof schema.editable !== "undefined" && !schema.editable) ||
+									!enable
+								}
 								required={schema.required}
 								onInput={schema.onInput}
 							/>
@@ -140,9 +117,6 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 				{schema.map((schema, i) => (
 					<React.Fragment key={i}>{inputRenderer(schema)}</React.Fragment>
 				))}
-				{/* <p>
-					<b>*</b> {indicatesRequired}
-				</p> */}
 			</form>
 		);
 	},

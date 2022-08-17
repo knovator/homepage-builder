@@ -16,6 +16,23 @@ const apiList = {
 		method: "DELETE",
 	}),
 
+	TILES: ({ prefix, id }: API_INPUT_TYPE) => ({
+		url: `${prefix}/${id}`,
+		method: "GET",
+	}),
+	// TILE_CREATE: ({ prefix }: API_INPUT_TYPE) => ({
+	// 	url: `${prefix}`,
+	// 	method: "POST",
+	// }),
+	// TILE_UPDATE: ({ prefix, id }: API_INPUT_TYPE) => ({
+	// 	url: `${prefix}/${id}`,
+	// 	method: "PUT",
+	// }),
+	// TILE_DELETE: ({ prefix, id }: API_INPUT_TYPE) => ({
+	// 	url: `${prefix}/${id}`,
+	// 	method: "DELETE",
+	// }),
+
 	// Image Upload API
 	IMAGE_UPLOAD: () => ({
 		url: "files/upload",

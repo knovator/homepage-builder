@@ -7,12 +7,12 @@ import Form from "../../common/Form";
 import TileItemsAccordian from "./TileItemsAccordian";
 
 const MasterForm = ({ onClose, open, formState }: FormProps) => {
-	const { t, onWidgetFormSubmit, data } = useWidgetState();
+	const { t, onWidgetFormSubmit, data, tilesList, tilesLoading, onTileFormSubmit, onDeleteTile } = useWidgetState();
 	const [webShow, setWebShow] = useState(false);
 	const [mobileShow, setMobileShow] = useState(false);
 	const widgetFormRef = useRef<HTMLFormElement | null>(null);
 
-	// Form
+	// Form Utility Functions
 	function handleCapitalize(event: React.ChangeEvent<HTMLInputElement>) {
 		event.target.value = capitalizeFirstLetter(event.target.value);
 		return event;
@@ -21,10 +21,12 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 		event.target.value = changeToCode(event.target.value);
 		return event;
 	}
-	// Widget Form
+
+	// Widget Form Functions
 	const onWidgetFormSubmitClick = () => {
 		widgetFormRef.current?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
 	};
+
 	// Schemas
 	const widgetFormSchema: SchemaType[] = [
 		{
@@ -35,7 +37,7 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			placeholder: t("widget.namePlaceholder"),
 			onInput: handleCapitalize,
 			validations: {
-				required: t("requiredName"),
+				required: t("widget.nameRequired"),
 			},
 		},
 		{
@@ -47,7 +49,7 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			editable: false,
 			placeholder: t("widget.codePlaceholder"),
 			validations: {
-				required: t("requiredCode"),
+				required: t("widget.codeRequired"),
 			},
 		},
 		{
@@ -55,6 +57,9 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			required: true,
 			accessor: "cardType",
 			type: "select",
+			validations: {
+				required: t("widget.typeRequired"),
+			},
 			options: [
 				{ label: "Fixed", value: "Fixed" },
 				{ label: "Slider", value: "Slider" },
@@ -83,7 +88,6 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 		},
 		{
 			label: `${t("tile.altText")}`,
-			required: true,
 			accessor: "altText",
 			type: "text",
 			placeholder: t("tile.altTextPlaceholder"),
@@ -95,14 +99,13 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			type: "url",
 			placeholder: t("tile.linkPlaceholder"),
 		},
-		{
-			label: `${t("tile.image")}`,
-			required: true,
-			accessor: "file",
-			type: "file",
-		},
+		// {
+		// 	label: `${t("tile.image")}`,
+		// 	required: true,
+		// 	accessor: "file",
+		// 	type: "file",
+		// },
 	];
-	// \ End of Form
 
 	return (
 		<Drawer
@@ -111,7 +114,9 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			title={formState === "ADD" ? "Add Widget" : formState === "UPDATE" ? "Update Widget" : ""}
 			footerContent={
 				<>
-					<Button type="danger">Cancel</Button>
+					<Button type="secondary" onClick={onClose}>
+						Cancel
+					</Button>
 					<Button onClick={onWidgetFormSubmitClick}>Submit</Button>
 				</>
 			}
@@ -132,8 +137,12 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 					id="web"
 					schema={tileFormSchema}
 					show={webShow}
+					tilesData={tilesList.web}
 					toggleShow={setWebShow}
-					onDataSubmit={(index, data) => console.log("web", index, data)}
+					onDataSubmit={onTileFormSubmit}
+					tileType="Web"
+					widgetId={data?._id}
+					onDelete={onDeleteTile}
 				/>
 
 				{/* Mobile Items */}
@@ -143,12 +152,16 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 					id="mobile"
 					schema={tileFormSchema}
 					show={mobileShow}
+					tilesData={tilesList.mobile}
 					toggleShow={setMobileShow}
-					onDataSubmit={(index, data) => console.log("mobile", index, data)}
+					onDataSubmit={onTileFormSubmit}
+					tileType="Mobile"
+					widgetId={data?._id}
+					onDelete={onDeleteTile}
 				/>
 			</div>
 		</Drawer>
 	);
-};
+};;;
 
 export default MasterForm;

@@ -43,9 +43,12 @@ const TRANSLATION_PAIRS_COMMON = {
 const TRANSLATION_PAIRS_WIDGET = {
 	"widget.name": "Name",
 	"widget.namePlaceholder": "Enter name",
+	"widget.nameRequired": "Name is required",
 	"widget.type": "Type",
+	"widget.typeRequired": "Type is required",
 	"widget.code": "Code",
 	"widget.codePlaceholder": "Enter code",
+	"widget.codeRequired": "Code is required",
 	"widget.webPerRow": "Web Per Row",
 	"widget.webPerRowPlaceholder": "Enter web per row",
 	"widget.mobilePerRow": "Mobile Per Row",

@@ -22,6 +22,7 @@ const WidgetContextProvider = ({
 	updateData = null,
 	canAdd = false,
 	canUpdate = false,
+	onDeleteTile = () => {},
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -36,6 +37,10 @@ const WidgetContextProvider = ({
 	data = [],
 	canDelete = false,
 	loader = undefined,
+	// Tile
+	tilesList = { web: [], mobile: [] },
+	tilesLoading = false,
+	onTileFormSubmit = (state: FormActionTypes, data: any) => {},
 	// other
 	children,
 }: WidgetContextProviderProps) => {
@@ -53,6 +58,7 @@ const WidgetContextProvider = ({
 				updateData,
 				canAdd,
 				canUpdate,
+				onDeleteTile,
 				// Pagination
 				currentPage,
 				limits,
@@ -67,6 +73,10 @@ const WidgetContextProvider = ({
 				data,
 				canDelete,
 				loader,
+				// Tile
+				tilesList,
+				tilesLoading,
+				onTileFormSubmit,
 			}}
 		>
 			{children}

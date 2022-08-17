@@ -1,17 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Accordian from "../../common/Accordian";
 import Button from "../../common/Button";
 import Form from "../../common/Form";
-
-interface TileItemsAccordianProps {
-	show: boolean;
-	id: string;
-	collapseId: string;
-	title: string;
-	toggleShow: (status: boolean) => void;
-	schema: SchemaType[];
-	onDataSubmit: (index: number, data: any) => void;
-}
 
 const TileItemsAccordian = ({
 	schema,
@@ -19,21 +9,38 @@ const TileItemsAccordian = ({
 	show,
 	title,
 	id,
+	tilesData,
 	collapseId,
 	toggleShow,
+	tileType,
+	widgetId,
+	onDelete,
 }: TileItemsAccordianProps) => {
+	const [data, setData] = useState<any[]>([]);
 	const formRefs = useRef<(HTMLFormElement | null)[]>([]);
 	const [itemsShow, setItemsShow] = useState<boolean[]>([]);
+	const [editingItemIndex, setEditingItemIndex] = useState<Number>();
 
-	const onWebTileFormSubmitClick = (index: number) => {
+	useEffect(() => {
+		if (Array.isArray(tilesData)) {
+			setData(tilesData);
+			formRefs.current = tilesData.map(() => null);
+			setItemsShow(tilesData.map(() => false));
+		}
+	}, [tilesData]);
+
+	const onTileFormSubmitClick = (index: number) => {
 		formRefs.current[index]?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
 	};
-	const onWebTileFormSubmit = (index: number, data: any) => {
-		onDataSubmit(index, data);
+	const onTileFormSubmit = (index: number, formData: any) => {
+		let state: FormActionTypes = index === editingItemIndex && data[index] ? "UPDATE" : "ADD";
+		let finalData = { ...formData, widgetId, tileType, sequence: index };
+		onDataSubmit(state, finalData, state === "UPDATE" ? data[index]?._id : undefined);
+		setEditingItemIndex(undefined);
 	};
-	const onItemsToggleClick = (index: number) => {
+	const onItemsToggleClick = (index: number, status?: boolean) => {
 		let newItemsShow: boolean[] = [...itemsShow];
-		let newStatus = !newItemsShow[index];
+		let newStatus = typeof status === "undefined" ? !newItemsShow[index] : status;
 		newItemsShow.fill(false);
 		newItemsShow[index] = newStatus;
 		setItemsShow(newItemsShow);
@@ -49,6 +56,22 @@ const TileItemsAccordian = ({
 		newItemsShow.push(false);
 		setItemsShow(newItemsShow);
 		formRefs.current.push(null);
+		onItemsToggleClick(newItemsShow.length - 1);
+	};
+	const onTileEditClick = (index: Number) => {
+		setEditingItemIndex(index);
+	};
+	const onTileCancelClick = (index: number) => {
+		if (!data[index]) {
+			onTileRemoveClick(index);
+		} else {
+			setEditingItemIndex(undefined);
+		}
+		onItemsToggleClick(index, false);
+	};
+	const onDeleteClick = (index: number) => {
+		onDelete(data[index]?._id);
+		onTileRemoveClick(index);
 	};
 
 	return (
@@ -59,7 +82,7 @@ const TileItemsAccordian = ({
 			collapseId={collapseId}
 			id={id}
 			footerContent={
-				<Button size="sm" onClick={onTileAddClick}>
+				<Button size="sm" onClick={onTileAddClick} disabled={!widgetId}>
 					Add
 				</Button>
 			}
@@ -75,22 +98,34 @@ const TileItemsAccordian = ({
 						id={`${id}-item-${index}`}
 						footerContent={
 							<>
-								<Button type="secondary" size="sm">
-									Cancel
-								</Button>
-								<Button type="primary" size="sm" onClick={() => onWebTileFormSubmitClick(index)}>
-									Submit
-								</Button>
-								<Button type="danger" size="sm" onClick={() => onTileRemoveClick(index)}>
-									Delete
-								</Button>
+								{editingItemIndex === index || !data[index] ? (
+									<>
+										<Button size="sm" onClick={() => onTileFormSubmitClick(index)}>
+											Save
+										</Button>
+										<Button type="secondary" size="sm" onClick={() => onTileCancelClick(index)}>
+											Cancel
+										</Button>
+									</>
+								) : (
+									<>
+										<Button size="sm" onClick={() => onTileEditClick(index)}>
+											Edit
+										</Button>
+										<Button type="danger" size="sm" onClick={() => onDeleteClick(index)}>
+											Delete
+										</Button>
+									</>
+								)}
 							</>
 						}
 					>
 						<Form
 							schema={schema}
-							onSubmit={(data) => onWebTileFormSubmit(index, data)}
+							data={data[index]}
+							onSubmit={(data) => onTileFormSubmit(index, data)}
 							ref={(el) => (formRefs.current[index] = el)}
+							enable={editingItemIndex === index || !data[index]}
 						/>
 					</Accordian>
 				))}

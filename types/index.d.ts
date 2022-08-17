@@ -39,6 +39,7 @@ interface WidgetContextType {
 	loading: boolean;
 	canAdd: boolean;
 	canUpdate: boolean;
+	onDeleteTile: (id: string) => void;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -49,11 +50,14 @@ interface WidgetContextType {
 	limits: number[];
 	canList: boolean;
 	// Table
-	// sortable: boolean;
 	columns: ColumnsSchema;
 	data: any;
 	loader?: JSX.Element;
 	canDelete?: boolean;
+	// Tile
+	tilesList: { [key: string]: any };
+	tilesLoading: boolean;
+	onTileFormSubmit: (state: FormActionTypes, data: any) => void;
 }
 // \ End Widget context
 
@@ -143,6 +147,19 @@ interface PaginationProps {
 	pageSize: number;
 	setCurrentPage: (value: number) => void;
 }
+interface TileItemsAccordianProps {
+	id: string;
+	show: boolean;
+	title: string;
+	tilesData: any[];
+	widgetId: string;
+	collapseId: string;
+	schema: SchemaType[];
+	tileType: "Web" | "Mobile";
+	toggleShow: (status: boolean) => void;
+	onDataSubmit: (state: FormActionTypes, data: any, updateId?: string) => void;
+	onDelete: (id: string) => void;
+}
 // Table
 type TableDataItemFormat = {
 	label: string;
@@ -161,7 +178,7 @@ interface TableProps {
 // \ End Components
 
 // API
-type ACTION_TYPES = "IMAGE_UPLOAD" | "IMAGE_REMOVE" | "CREATE" | "LIST" | "DELETE" | "UPDATE";
+type ACTION_TYPES = "IMAGE_UPLOAD" | "IMAGE_REMOVE" | "CREATE" | "LIST" | "DELETE" | "UPDATE" | "TILES";
 
 interface BaseAPIProps {
 	config?: any;

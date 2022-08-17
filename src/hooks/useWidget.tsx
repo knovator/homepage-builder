@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CALLBACK_CODES, INTERNAL_ERROR_CODE } from "../constants/common";
 import { useProviderState } from "../context/ProviderContext";
-import { dataGatter } from "../helper/utils";
+import { paginationDataGatter, dataGatter } from "../helper/utils";
 import usePagination from "./usePagination";
 import request, { getApiType } from "../api";
 
@@ -13,13 +13,15 @@ interface UseWidgetProps {
 
 const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) => {
 	const [list, setList] = useState<any[]>([]);
+	const [tilesList, setTilesList] = useState({ web: [], mobile: [] });
+	const [tilesLoading, setTilesLoading] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [totalPages, setTotalPages] = useState(0);
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [itemData, setItemData] = useState<any | null>(null);
 	const [formState, setFormState] = useState<FormActionTypes>();
 
-	const { baseUrl, token, onError, onSuccess, widgetRoutesPrefix } = useProviderState();
+	const { baseUrl, token, onError, onSuccess, widgetRoutesPrefix, tilesRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
 
 	const handleError = (code: CALLBACK_CODES) => (error: any) => {
@@ -54,14 +56,37 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 					setLoading(false);
 					setTotalPages(response.data.totalPages);
 					setTotalRecords(response.data.totalDocs);
-					return setList(dataGatter(response));
+					return setList(paginationDataGatter(response));
 				}
 				setLoading(false);
 			} catch (error) {
 				setLoading(false);
 			}
 		},
-		[baseUrl, currentPage, filter.limit, filter.offset, onError, onSuccess, routes, token],
+		[baseUrl, currentPage, filter.limit, filter.offset, routes, token],
+	);
+	const getTiles = useCallback(
+		async (id: string) => {
+			try {
+				setTilesLoading(true);
+				let api = getApiType({ routes, action: "TILES", prefix: tilesRoutesPrefix, id });
+				let response = await request({
+					baseUrl,
+					token,
+					method: api.method,
+					url: api.url,
+					onError: handleError(CALLBACK_CODES.GET_ALL),
+				});
+				if (response?.code === "SUCCESS") {
+					setTilesLoading(false);
+					return setTilesList(dataGatter(response));
+				}
+				setTilesLoading(false);
+			} catch (error) {
+				setTilesLoading(false);
+			}
+		},
+		[baseUrl, routes, token],
 	);
 	const onWidgetFormSubmit = async (data: any) => {
 		setLoading(true);
@@ -99,7 +124,7 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		setFormState(undefined);
 		setItemData(null);
 	};
-	const onCofirmDeleteMaster = async () => {
+	const onCofirmDeleteWidget = async () => {
 		try {
 			let proceed = true;
 			if (typeof preConfirmDelete === "function") {
@@ -116,6 +141,7 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 					routes,
 					action: "DELETE",
 					prefix: widgetRoutesPrefix,
+					id: itemData?._id,
 				});
 				let response = await request({
 					baseUrl,
@@ -123,9 +149,6 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 					method: api.method,
 					url: api.url,
 					onError: handleError(CALLBACK_CODES.DELETE),
-					data: {
-						id: [itemData?.id],
-					},
 				});
 				if (response?.code === "SUCCESS") {
 					setLoading(false);
@@ -144,9 +167,70 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 			onCloseForm();
 		}
 	};
+	const onDeleteTile = async (id: string) => {
+		try {
+			setTilesLoading(true);
+			let api = getApiType({ routes, action: "DELETE", prefix: tilesRoutesPrefix, id });
+			let response = await request({
+				baseUrl,
+				token,
+				method: api.method,
+				url: api.url,
+				onError: handleError(CALLBACK_CODES.DELETE),
+			});
+			if (response?.code === "SUCCESS") {
+				setTilesLoading(false);
+				onSuccess(CALLBACK_CODES.DELETE, response?.code, response?.message);
+				getTiles(itemData?._id);
+				return;
+			}
+			setTilesLoading(false);
+			onError(CALLBACK_CODES.DELETE, response?.code, response?.message);
+		} catch (error) {
+			setTilesLoading(false);
+			onError(CALLBACK_CODES.DELETE, INTERNAL_ERROR_CODE, (error as Error).message);
+		}
+	};
+
 	const onChangeFormState = (state: FormActionTypes, data?: any) => {
 		setItemData(data || null);
 		setFormState(state);
+		if (state === "UPDATE" && data) {
+			getTiles(data._id);
+		} else if (state === "ADD") {
+			setTilesList({ web: [], mobile: [] });
+		}
+	};
+	const onTileFormSubmit = async (state: FormActionTypes, data: any, updateId?: string) => {
+		setTilesLoading(true);
+		let code = state === "ADD" ? CALLBACK_CODES.CREATE : CALLBACK_CODES.UPDATE;
+		try {
+			let api = getApiType({
+				routes,
+				action: state === "ADD" ? "CREATE" : "UPDATE",
+				prefix: tilesRoutesPrefix,
+				id: updateId,
+			});
+			let response = await request({
+				baseUrl,
+				token,
+				data,
+				url: api.url,
+				method: api.method,
+				onError: handleError(code),
+			});
+			if (response?.code === "SUCCESS") {
+				setTilesLoading(false);
+				onSuccess(code, response?.code, response?.message);
+				getTiles(itemData._id);
+			} else {
+				setTilesLoading(false);
+				onError(code, response?.code, response?.message);
+			}
+		} catch (error) {
+			setTilesLoading(false);
+			onError(code, INTERNAL_ERROR_CODE, (error as Error).message);
+		}
 	};
 
 	useEffect(() => {
@@ -173,8 +257,14 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		itemData,
 		onChangeFormState,
 		onCloseForm,
+		onDeleteTile,
 		onWidgetFormSubmit,
-		onCofirmDeleteMaster,
+		onCofirmDeleteWidget,
+
+		// Tiles
+		tilesList,
+		tilesLoading,
+		onTileFormSubmit,
 	};
 };
 

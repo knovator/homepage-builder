@@ -1,5 +1,8 @@
-export const dataGatter = (data: any) => {
+export const paginationDataGatter = (data: any) => {
 	return data.data.docs;
+};
+export const dataGatter = (data: any) => {
+	return data.data;
 };
 
 export const capitalizeFirstLetter = (string = "") => `${string?.charAt(0)?.toUpperCase()}${string?.slice(1)}`;
