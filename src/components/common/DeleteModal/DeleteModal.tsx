@@ -32,25 +32,25 @@ const DeleteModal = ({
 	}, [formState]);
 	return (
 		<Modal open={formState === "DELETE"} onClose={onClose} title="Confirmation Required">
-			<div className="kms_delete-header">
+			<div className="khb_delete-header">
 				<p>
 					{permanentlyDelete} <b>{itemData?.name}</b>
 				</p>
 			</div>
-			<div className="kms_delete-content">
+			<div className="khb_delete-content">
 				<p>{lossOfData}</p>
-				<p className="kms_delete-note">
+				<p className="khb_delete-note">
 					{pleaseType} <b className="text-black font-bold">{itemData?.name}</b> {toProceedOrCancel}
 				</p>
 			</div>
-			<div className="kms_delete-actions">
+			<div className="khb_delete-actions">
 				<Input
 					placeholder="Type Here"
-					className="kms_delete-input"
+					className="khb_delete-input"
 					value={userInput}
 					onChange={(e) => setUserInput(e.target.value)}
 				/>
-				<div className="kms_delete-buttons">
+				<div className="khb_delete-buttons">
 					<Button disabled={userInput !== itemData?.name} onClick={onConfirmDelete}>
 						{confirm}
 					</Button>

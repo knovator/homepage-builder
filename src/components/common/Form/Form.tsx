@@ -1,5 +1,5 @@
 import React, { forwardRef, MutableRefObject, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import { isEmpty } from "../../../helper/utils";
 import Input from "../Input";
@@ -21,6 +21,8 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			handleSubmit,
 			reset,
 			setValue,
+			control,
+			setError,
 		} = useForm();
 
 		// setting data values
@@ -89,6 +91,25 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 						);
 						break;
 				}
+			} else if (schema.Input) {
+				input = (
+					<div className="kms_input-wrapper">
+						<label className="kms_input-label">{schema.label}</label>
+						<Controller
+							control={control}
+							name={schema.accessor}
+							rules={schema.validations}
+							render={({ field }) =>
+								schema.Input!({
+									field,
+									error: errors[schema.accessor]?.message?.toString(),
+									setError: (msg) =>
+										setError.call(null, schema.accessor, { type: "custom", message: msg }),
+								})
+							}
+						/>
+					</div>
+				);
 			} else throw new Error(`Please provide Input or type prop to render input Labeled ${schema.label}`);
 
 			return input;

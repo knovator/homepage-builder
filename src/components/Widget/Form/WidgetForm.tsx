@@ -1,13 +1,28 @@
 import React, { useRef, useState } from "react";
+
 import Drawer from "../../common/Drawer";
 import Button from "../../common/Button";
-import { useWidgetState } from "../../../context/WidgetContext";
-import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
 import Form from "../../common/Form";
+import ImageUpload from "../../common/ImageUpload";
 import TileItemsAccordian from "./TileItemsAccordian";
 
+import { useWidgetState } from "../../../context/WidgetContext";
+import { useProviderState } from "../../../context/ProviderContext";
+import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
+
 const MasterForm = ({ onClose, open, formState }: FormProps) => {
-	const { t, onWidgetFormSubmit, data, tilesList, tilesLoading, onTileFormSubmit, onDeleteTile } = useWidgetState();
+	const { baseUrl } = useProviderState();
+	const {
+		t,
+		onWidgetFormSubmit,
+		data,
+		tilesList,
+		tilesLoading,
+		onTileFormSubmit,
+		onDeleteTile,
+		onImageRemove,
+		onImageUpload,
+	} = useWidgetState();
 	const [webShow, setWebShow] = useState(false);
 	const [mobileShow, setMobileShow] = useState(false);
 	const widgetFormRef = useRef<HTMLFormElement | null>(null);
@@ -99,12 +114,36 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			type: "url",
 			placeholder: t("tile.linkPlaceholder"),
 		},
-		// {
-		// 	label: `${t("tile.image")}`,
-		// 	required: true,
-		// 	accessor: "file",
-		// 	type: "file",
-		// },
+		{
+			label: t("tile.image"),
+			accessor: "img",
+			Input: ({ field, error, setError }) => (
+				<ImageUpload
+					imgId={field.value}
+					maxSize={10_485_760}
+					onError={setError}
+					error={error}
+					setImgId={(value) => {
+						field.onChange(value);
+					}}
+					baseUrl={baseUrl}
+					text={
+						<>
+							<div className="khb_img-text-wrapper">
+								<label htmlFor="file-upload" className="khb_img-text-label">
+									<span>{t("tile.uploadFile")}</span>
+								</label>
+								<p className="khb_img-text-1">{t("tile.dragDrop")}</p>
+							</div>
+							<p className="khb_img-text-2">{t("tile.allowedFormat")}</p>
+						</>
+					}
+					onImageUpload={onImageUpload}
+					onImageRemove={onImageRemove}
+					className="khb_img-upload-wrapper-3"
+				/>
+			),
+		},
 	];
 
 	return (

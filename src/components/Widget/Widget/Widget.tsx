@@ -5,7 +5,7 @@ import { createTranslation } from "../../../helper/utils";
 import { TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_WIDGET, TRANSLATION_PAIRS_TILES } from "../../../constants/common";
 
 import Table from "../Table";
-import MasterForm from "../Form";
+import WidgetForm from "../Form";
 import AddButton from "../AddButton";
 import Pagination from "../Pagination";
 import WidgetSearch from "../Search";
@@ -28,6 +28,8 @@ const Widget = ({ t }: WidgetProps) => {
 		getWidgets,
 		onCofirmDeleteWidget,
 		onDeleteTile,
+		onImageRemove,
+		onImageUpload,
 		// Pagination
 		totalPages,
 		totalRecords,
@@ -51,6 +53,8 @@ const Widget = ({ t }: WidgetProps) => {
 			data={itemData}
 			onDeleteTile={onDeleteTile}
 			getWidgets={getWidgets}
+			onImageRemove={onImageRemove}
+			onImageUpload={onImageUpload}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}
@@ -68,7 +72,7 @@ const Widget = ({ t }: WidgetProps) => {
 				<Table />
 				<Pagination />
 			</div>
-			<MasterForm
+			<WidgetForm
 				open={formState === "ADD" || formState === "UPDATE"}
 				onClose={onCloseForm}
 				formState={formState}

@@ -41,6 +41,8 @@ interface WidgetContextType {
 	canUpdate: boolean;
 	onDeleteTile: (id: string) => void;
 	getWidgets: (searchText: string) => void;
+	onImageUpload: (file: File) => Promise<{ fileUrl: string; fileId: string; fileUri: string } | void>;
+	onImageRemove: (id: string) => Promise<void>;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -164,6 +166,19 @@ interface TileItemsAccordianProps {
 	cancelText?: string;
 	deleteText?: string;
 	saveText?: string;
+}
+interface ImageUploadProps {
+	className?: string;
+	text: string | JSX.Element;
+	maxSize: number;
+	imgId?: string | ImageObjectProps;
+	setImgId: (value?: string | null) => void;
+	clearError?: () => void;
+	onError: (msg: string) => void;
+	onImageUpload: (file: File) => Promise<{ fileUrl: string; fileId: string; fileUri: string } | void>;
+	onImageRemove?: (id: string) => Promise<void>;
+	baseUrl: string;
+	error?: string;
 }
 // Table
 type TableDataItemFormat = {

@@ -24,6 +24,8 @@ const WidgetContextProvider = ({
 	canUpdate = false,
 	onDeleteTile = () => {},
 	getWidgets = () => {},
+	onImageUpload = async (file: File) => {},
+	onImageRemove = async (id: string) => {},
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -61,6 +63,8 @@ const WidgetContextProvider = ({
 				canUpdate,
 				onDeleteTile,
 				getWidgets,
+				onImageUpload,
+				onImageRemove,
 				// Pagination
 				currentPage,
 				limits,
