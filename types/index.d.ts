@@ -40,6 +40,7 @@ interface WidgetContextType {
 	canAdd: boolean;
 	canUpdate: boolean;
 	onDeleteTile: (id: string) => void;
+	getWidgets: (searchText: string) => void;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -159,6 +160,10 @@ interface TileItemsAccordianProps {
 	toggleShow: (status: boolean) => void;
 	onDataSubmit: (state: FormActionTypes, data: any, updateId?: string) => void;
 	onDelete: (id: string) => void;
+	editText?: string;
+	cancelText?: string;
+	deleteText?: string;
+	saveText?: string;
 }
 // Table
 type TableDataItemFormat = {

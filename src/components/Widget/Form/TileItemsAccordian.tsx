@@ -15,6 +15,10 @@ const TileItemsAccordian = ({
 	tileType,
 	widgetId,
 	onDelete,
+	saveText = "Save",
+	cancelText = "Cancel",
+	deleteText = "Delete",
+	editText = "Edit",
 }: TileItemsAccordianProps) => {
 	const [data, setData] = useState<any[]>([]);
 	const formRefs = useRef<(HTMLFormElement | null)[]>([]);
@@ -101,19 +105,19 @@ const TileItemsAccordian = ({
 								{editingItemIndex === index || !data[index] ? (
 									<>
 										<Button size="sm" onClick={() => onTileFormSubmitClick(index)}>
-											Save
+											{saveText}
 										</Button>
 										<Button type="secondary" size="sm" onClick={() => onTileCancelClick(index)}>
-											Cancel
+											{cancelText}
 										</Button>
 									</>
 								) : (
 									<>
 										<Button size="sm" onClick={() => onTileEditClick(index)}>
-											Edit
+											{editText}
 										</Button>
 										<Button type="danger" size="sm" onClick={() => onDeleteClick(index)}>
-											Delete
+											{deleteText}
 										</Button>
 									</>
 								)}

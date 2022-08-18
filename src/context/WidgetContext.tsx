@@ -23,6 +23,7 @@ const WidgetContextProvider = ({
 	canAdd = false,
 	canUpdate = false,
 	onDeleteTile = () => {},
+	getWidgets = () => {},
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -59,6 +60,7 @@ const WidgetContextProvider = ({
 				canAdd,
 				canUpdate,
 				onDeleteTile,
+				getWidgets,
 				// Pagination
 				currentPage,
 				limits,

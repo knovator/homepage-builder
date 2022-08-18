@@ -55,6 +55,12 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.mobilePerRowPlaceholder": "Enter mobile per row",
 	"widget.webItems": "Web Items",
 	"widget.mobileItems": "Mobile Items",
+	"widget.searchPlaceholder": "Search Widgets...",
+	"widget.addText": "Add",
+	"widget.editText": "Edit",
+	"widget.cancelText": "Cancel",
+	"widget.deleteText": "Delete",
+	"widget.saveText": "Save",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",

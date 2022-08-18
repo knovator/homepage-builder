@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import Table from "../Table";
-import Pagination from "../Pagination";
-import MasterForm from "../Form";
+import React from "react";
 import useWidget from "../../../hooks/useWidget";
 import WidgetContextProvider from "../../../context/WidgetContext";
-import AddButton from "../AddButton";
 import { createTranslation } from "../../../helper/utils";
 import { TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_WIDGET, TRANSLATION_PAIRS_TILES } from "../../../constants/common";
+
+import Table from "../Table";
+import MasterForm from "../Form";
+import AddButton from "../AddButton";
+import Pagination from "../Pagination";
+import WidgetSearch from "../Search";
 import DeleteModal from "../../common/DeleteModal";
 
 const Widget = ({ t }: WidgetProps) => {
@@ -23,6 +25,7 @@ const Widget = ({ t }: WidgetProps) => {
 		onCloseForm,
 		onWidgetFormSubmit,
 		itemData,
+		getWidgets,
 		onCofirmDeleteWidget,
 		onDeleteTile,
 		// Pagination
@@ -47,6 +50,7 @@ const Widget = ({ t }: WidgetProps) => {
 			onWidgetFormSubmit={onWidgetFormSubmit}
 			data={itemData}
 			onDeleteTile={onDeleteTile}
+			getWidgets={getWidgets}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}
@@ -59,6 +63,7 @@ const Widget = ({ t }: WidgetProps) => {
 			onTileFormSubmit={onTileFormSubmit}
 		>
 			<AddButton />
+			<WidgetSearch />
 			<div className="khb_table-wrapper">
 				<Table />
 				<Pagination />

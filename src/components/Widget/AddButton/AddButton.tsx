@@ -3,8 +3,8 @@ import Button from "../../common/Button";
 import { useWidgetState } from "../../../context/WidgetContext";
 
 const AddButton = () => {
-	const { onChangeFormState } = useWidgetState();
-	return <Button onClick={() => onChangeFormState("ADD")}>Add</Button>;
+	const { onChangeFormState, t } = useWidgetState();
+	return <Button onClick={() => onChangeFormState("ADD")}>{t("widget.addText")}</Button>;
 };
 
 export default AddButton;
