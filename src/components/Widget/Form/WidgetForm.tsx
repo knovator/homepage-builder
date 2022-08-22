@@ -154,9 +154,9 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			footerContent={
 				<>
 					<Button type="secondary" onClick={onClose}>
-						{t("widget.cancelText")}
+						{t("cancelButtonText")}
 					</Button>
-					<Button onClick={onWidgetFormSubmitClick}>{t("widget.saveText")}</Button>
+					<Button onClick={onWidgetFormSubmitClick}>{t("saveButtonText")}</Button>
 				</>
 			}
 		>
@@ -182,10 +182,10 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Web"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
-					cancelText={t("widget.cancelText")}
-					saveText={t("widget.saveText")}
-					editText={t("widget.editText")}
-					deleteText={t("widget.deleteText")}
+					cancelText={t("cancelButtonText")}
+					saveText={t("saveButtonText")}
+					editText={t("editButtonText")}
+					deleteText={t("deleteButtonText")}
 				/>
 
 				{/* Mobile Items */}
@@ -201,10 +201,10 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Mobile"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
-					cancelText={t("widget.cancelText")}
-					saveText={t("widget.saveText")}
-					editText={t("widget.editText")}
-					deleteText={t("widget.deleteText")}
+					cancelText={t("cancelButtonText")}
+					saveText={t("saveButtonText")}
+					editText={t("editButtonText")}
+					deleteText={t("deleteButtonText")}
 				/>
 			</div>
 		</Drawer>

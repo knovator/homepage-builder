@@ -11,6 +11,7 @@ interface ProviderContextType {
 	onSuccess: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	widgetRoutesPrefix: string;
 	tilesRoutesPrefix: string;
+	pageRoutesPrefix: string;
 }
 interface ProviderContextProviderProps
 	extends React.PropsWithChildren,
@@ -23,6 +24,7 @@ interface ProviderContextProviderProps
 	) => void;
 	widgetRoutesPrefix?: string;
 	tilesRoutesPrefix?: string;
+	pageRoutesPrefix?: string;
 }
 // \ End Provider context
 
@@ -61,6 +63,34 @@ interface WidgetContextType {
 	tilesList: { [key: string]: any };
 	tilesLoading: boolean;
 	onTileFormSubmit: (state: FormActionTypes, data: any) => void;
+}
+interface PageContextType {
+	t: (key: string) => string;
+	// Form
+	list: any[];
+	formState: FormActionTypes | undefined;
+	closeForm: () => void;
+	onPageFormSubmit: (data: any) => void;
+	onChangeFormState: (status: FormActionTypes, data?: any) => void;
+	loading: boolean;
+	canAdd: boolean;
+	canUpdate: boolean;
+	// onDeleteTile: (id: string) => void;
+	// getWidgets: (searchText: string) => void;
+	// Pagination
+	currentPage: number;
+	setCurrentPage: (page: number) => void;
+	totalPages: number;
+	pageSize: number;
+	setPageSize: (size: number) => void;
+	totalRecords: number;
+	limits: number[];
+	canList: boolean;
+	// Table
+	columns: ColumnsSchema;
+	data: any;
+	loader?: JSX.Element;
+	canDelete?: boolean;
 }
 // \ End Widget context
 
@@ -141,6 +171,9 @@ interface SchemaType {
 	required?: boolean;
 }
 interface WidgetProps {
+	t?: any;
+}
+interface PageProps {
 	t?: any;
 }
 interface PaginationProps {

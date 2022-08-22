@@ -10,6 +10,7 @@ const Provider = ({
 	onSuccess = () => {},
 	tilesRoutesPrefix = "tiles",
 	widgetRoutesPrefix = "widgets",
+	pageRoutesPrefix = "pages",
 }: ProviderContextProviderProps) => {
 	return (
 		<ProviderContext.Provider
@@ -20,6 +21,7 @@ const Provider = ({
 				onSuccess,
 				tilesRoutesPrefix,
 				widgetRoutesPrefix,
+				pageRoutesPrefix,
 			}}
 		>
 			{children}

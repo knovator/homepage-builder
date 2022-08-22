@@ -1,12 +1,13 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from "react-dom/client";
-import { Widget, Provider } from "../.";
+import { Widget, Provider, Page } from "../.";
 
 const App = () => {
 	return (
 		<Provider baseUrl="http://localhost:8080">
-			<Widget />
+			{/* <Widget /> */}
+			<Page />
 		</Provider>
 	);
 };
