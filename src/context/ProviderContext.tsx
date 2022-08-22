@@ -8,6 +8,8 @@ const Provider = ({
 	token,
 	onError = () => {},
 	onSuccess = () => {},
+	tilesRoutesPrefix = "tiles",
+	widgetRoutesPrefix = "widgets",
 }: ProviderContextProviderProps) => {
 	return (
 		<ProviderContext.Provider
@@ -16,6 +18,8 @@ const Provider = ({
 				token,
 				onError,
 				onSuccess,
+				tilesRoutesPrefix,
+				widgetRoutesPrefix,
 			}}
 		>
 			{children}

@@ -3,45 +3,53 @@ import Pencil from "../../../icons/pencil";
 import Trash from "../../../icons/trash";
 import Button from "../Button";
 
-const Table = () => {
+const Table = ({ data, dataKeys, actions }: TableProps) => {
 	return (
 		<table className="khb_table">
 			<thead className="khb_table-thead">
 				<tr>
-					<th scope="col" className="khb_table-heading">
-						Product name
-					</th>
-					<th scope="col" className="khb_table-heading">
-						Color
-					</th>
-					<th scope="col" className="khb_table-heading">
-						Category
-					</th>
-					<th scope="col" className="khb_table-heading">
-						Price
-					</th>
-					<th scope="col" className="khb_table-heading">
-						Actions
-					</th>
+					{dataKeys.map((key, i) => (
+						<th scope="col" className="khb_table-heading" key={i}>
+							{key.label}
+						</th>
+					))}
+					{actions && (actions?.edit || actions?.delete) && (
+						<th scope="col" className="khb_table-heading">
+							Actions
+						</th>
+					)}
 				</tr>
 			</thead>
 			<tbody>
-				<tr className="khb_table-row">
-					<th scope="row" className="khb_table-row-heading">
-						Apple MacBook Pro 17"
-					</th>
-					<td className="khb_table-row-data">Sliver</td>
-					<td className="khb_table-row-data">Laptop</td>
-					<td className="khb_table-row-data">$2999</td>
-					<td className="khb_table-row-actions">
-						<Button size="xs">
-							<Pencil />
-						</Button>
-						<Button size="xs" type="danger">
-							<Trash />
-						</Button>
-					</td>
-				</tr>
+				{data.map((item: any, i: number) => (
+					<tr className="khb_table-row" key={item.id || item._id || i}>
+						{dataKeys.map((key, j) => {
+							return key.highlight ? (
+								<th scope="row" className="khb_table-row-heading" key={j}>
+									{item[key.dataKey]}
+								</th>
+							) : (
+								<td className="khb_table-row-data" key={j}>
+									{item[key.dataKey]}
+								</td>
+							);
+						})}
+						{actions && (
+							<td className="khb_table-row-actions">
+								{actions.edit && (
+									<Button size="xs" onClick={() => actions.edit!(item)}>
+										<Pencil />
+									</Button>
+								)}
+								{actions.delete && (
+									<Button size="xs" type="danger" onClick={() => actions.delete!(item)}>
+										<Trash />
+									</Button>
+								)}
+							</td>
+						)}
+					</tr>
+				))}
 			</tbody>
 		</table>
 	);
