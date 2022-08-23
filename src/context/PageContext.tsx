@@ -14,6 +14,7 @@ const PageContextProvider = ({
 		)[key]),
 	// Form
 	list = [],
+	widgets = [],
 	formState = "",
 	closeForm = () => {},
 	loading = false,
@@ -21,6 +22,9 @@ const PageContextProvider = ({
 	onPageFormSubmit = () => {},
 	canAdd = false,
 	canUpdate = false,
+	selectedWidgets = [],
+	setSelectedWidgets = () => {},
+	onChangeWidgetSequence = () => {},
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -44,6 +48,7 @@ const PageContextProvider = ({
 				t,
 				// Form
 				list,
+				widgets,
 				closeForm,
 				formState,
 				loading,
@@ -51,6 +56,9 @@ const PageContextProvider = ({
 				canAdd,
 				canUpdate,
 				onPageFormSubmit,
+				selectedWidgets,
+				setSelectedWidgets,
+				onChangeWidgetSequence,
 				// Pagination
 				currentPage,
 				limits,

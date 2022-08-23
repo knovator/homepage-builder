@@ -17,6 +17,7 @@ const Page = ({ t }: PageProps) => {
 	});
 	const {
 		list,
+		widgets,
 		loading,
 		totalPages,
 		totalRecords,
@@ -28,7 +29,10 @@ const Page = ({ t }: PageProps) => {
 		onChangeFormState,
 		onPageFormSubmit,
 		onCloseForm,
+		selectedWidgets,
+		setSelectedWidgets,
 		onCofirmDeletePage,
+		onChangeWidgetSequence,
 	} = usePage({
 		defaultLimit: 10,
 	});
@@ -37,6 +41,7 @@ const Page = ({ t }: PageProps) => {
 		<PageContextProvider
 			t={derivedT}
 			list={list}
+			widgets={widgets}
 			data={itemData}
 			loading={loading}
 			totalPages={totalPages}
@@ -46,6 +51,9 @@ const Page = ({ t }: PageProps) => {
 			pageSize={pageSize}
 			setCurrentPage={setCurrentPage}
 			onPageFormSubmit={onPageFormSubmit}
+			selectedWidgets={selectedWidgets}
+			setSelectedWidgets={setSelectedWidgets}
+			onChangeWidgetSequence={onChangeWidgetSequence}
 		>
 			<AddButton />
 			<div className="khb_table-wrapper">

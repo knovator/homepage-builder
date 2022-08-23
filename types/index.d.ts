@@ -64,6 +64,7 @@ interface WidgetContextType {
 	tilesLoading: boolean;
 	onTileFormSubmit: (state: FormActionTypes, data: any) => void;
 }
+type OptionType = { label: string; value: string };
 interface PageContextType {
 	t: (key: string) => string;
 	// Form
@@ -75,7 +76,10 @@ interface PageContextType {
 	loading: boolean;
 	canAdd: boolean;
 	canUpdate: boolean;
-	// onDeleteTile: (id: string) => void;
+	widgets: any[];
+	selectedWidgets: OptionType[];
+	setSelectedWidgets: (widgets: OptionType[]) => void;
+	onChangeWidgetSequence: (souceIndex: number, destinationIndex: number) => void;
 	// getWidgets: (searchText: string) => void;
 	// Pagination
 	currentPage: number;
@@ -147,6 +151,18 @@ interface SelectProps {
 	rest?: any;
 	required?: boolean;
 }
+interface ReactSelectProps {
+	onChange?: (opt: { value: string; label: string }[]) => void;
+	label?: string;
+	error?: string;
+	options: { value: string; label: string }[];
+	className?: string;
+	disabled?: boolean;
+	id?: string;
+	isMulti?: boolean;
+	required?: boolean;
+	selectedOptions?: { value: string; label: string }[];
+}
 interface FormProps {
 	open: boolean;
 	onClose: () => void;
@@ -164,11 +180,14 @@ interface SchemaType {
 	validations?: import("react-hook-form").RegisterOptions;
 	editable?: boolean;
 	onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file" | "url";
+	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file" | "url" | "ReactSelect";
 	options?: { value: string; label: string }[];
+	selectedOptions?: { value: string; label: string }[];
+	isMulti?: boolean;
 	defaultValue?: string | number | boolean;
 	placeholder?: string;
 	required?: boolean;
+	onChange?: (e: any) => void;
 }
 interface WidgetProps {
 	t?: any;

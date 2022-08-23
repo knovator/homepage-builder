@@ -48,7 +48,6 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 							offset: filter.offset,
 							limit: filter.limit,
 							page: currentPage,
-							pagination: true,
 						},
 					},
 				});

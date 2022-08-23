@@ -1,14 +1,17 @@
 import React, { useRef } from "react";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 
 import Drawer from "../../common/Drawer";
 import Button from "../../common/Button";
 import Form from "../../common/Form";
+import SelectedWidgets from "./SelectedWidgets";
 
 import { usePageState } from "../../../context/PageContext";
 import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
 
 const PageForm = ({ onClose, open, formState }: FormProps) => {
-	const { t, data, onPageFormSubmit } = usePageState();
+	const { t, data, onPageFormSubmit, selectedWidgets, setSelectedWidgets, widgets, onChangeWidgetSequence } =
+		usePageState();
 	const pageFormRef = useRef<HTMLFormElement | null>(null);
 
 	// Form Utility Functions
@@ -24,6 +27,11 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 	// Widget Form Functions
 	const onPageFormSubmitClick = () => {
 		pageFormRef.current?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+	};
+
+	const onDragEnd = (result: DropResult) => {
+		const { destination, source } = result;
+		if (destination) onChangeWidgetSequence(source.index, destination.index);
 	};
 
 	// Schemas
@@ -51,6 +59,15 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 				required: t("page.codeRequired"),
 			},
 		},
+		{
+			label: `Widgets`,
+			accessor: "widgets",
+			type: "ReactSelect",
+			options: widgets,
+			selectedOptions: selectedWidgets,
+			isMulti: true,
+			onChange: (widgets) => setSelectedWidgets(widgets),
+		},
 	];
 
 	return (
@@ -76,7 +93,28 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 					ref={pageFormRef}
 					data={data}
 					isUpdating={formState === "UPDATE"}
+					updates={{
+						widgets: selectedWidgets.map((widget) => widget.value),
+					}}
 				/>
+				<DragDropContext onDragEnd={onDragEnd}>
+					<Droppable droppableId="droppable">
+						{(droppableProvided) => (
+							<>
+								<div
+									className="space-y-2"
+									ref={droppableProvided.innerRef}
+									{...droppableProvided.droppableProps}
+								>
+									<SelectedWidgets
+										widgets={selectedWidgets}
+										placeholder={droppableProvided.placeholder}
+									/>
+								</div>
+							</>
+						)}
+					</Droppable>
+				</DragDropContext>
 			</div>
 		</Drawer>
 	);

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CALLBACK_CODES, INTERNAL_ERROR_CODE } from "../constants/common";
 import { useProviderState } from "../context/ProviderContext";
-import { paginationDataGatter, dataGatter, build_path } from "../helper/utils";
+import { paginationDataGatter } from "../helper/utils";
 import usePagination from "./usePagination";
 import request, { getApiType } from "../api";
 
@@ -14,13 +14,15 @@ interface UsePageProps {
 const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 	const [list, setList] = useState<any[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [widgets, setWidgets] = useState<{ added: any[]; notAdded: any[] }>({ added: [], notAdded: [] });
+	const [widgets, setWidgets] = useState<any[]>([]);
+	const [selectedWidgets, setSelectedWidgets] = useState<{ label: string; value: string }[]>([]);
+	const [widgetsLoading, setWidgetsLoading] = useState<boolean>(false);
 	const [totalPages, setTotalPages] = useState(0);
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [itemData, setItemData] = useState<any | null>(null);
 	const [formState, setFormState] = useState<FormActionTypes>();
 
-	const { baseUrl, token, onError, onSuccess, pageRoutesPrefix, tilesRoutesPrefix } = useProviderState();
+	const { baseUrl, token, onError, onSuccess, pageRoutesPrefix, widgetRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
 
 	const handleError = (code: CALLBACK_CODES) => (error: any) => {
@@ -30,6 +32,35 @@ const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 		}
 		onError(code, "error", data?.message);
 	};
+	const getWidgets = useCallback(async () => {
+		try {
+			setWidgetsLoading(true);
+			let api = getApiType({ routes, action: "LIST", prefix: widgetRoutesPrefix });
+			let response = await request({
+				baseUrl,
+				token,
+				method: api.method,
+				url: api.url,
+				onError: handleError(CALLBACK_CODES.GET_ALL),
+				data: {
+					all: true,
+				},
+			});
+			if (response?.code === "SUCCESS") {
+				let widgetsData = paginationDataGatter(response);
+				widgetsData = widgetsData.map((item: any) => {
+					return {
+						label: item.name,
+						value: item._id,
+					};
+				});
+				return setWidgets(widgetsData);
+			}
+			setWidgetsLoading(false);
+		} catch (error) {
+			setWidgetsLoading(false);
+		}
+	}, [baseUrl, routes, token]);
 	const getPages = useCallback(
 		async (search?: string) => {
 			try {
@@ -47,7 +78,6 @@ const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 							offset: filter.offset,
 							limit: filter.limit,
 							page: currentPage,
-							pagination: true,
 						},
 					},
 				});
@@ -146,10 +176,27 @@ const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 	const onChangeFormState = (state: FormActionTypes, data?: any) => {
 		setItemData(data || null);
 		setFormState(state);
+		if (state === "UPDATE" && data?.widgets) {
+			setSelectedWidgets(
+				data.widgets.map((widgetId: string) => widgets.find((widget) => widget.value === widgetId)),
+			);
+			// setSelectedWidgets(widgets.filter((widget) => data.widgets.includes(widget.value)));
+		} else {
+			setSelectedWidgets([]);
+		}
+	};
+	const onChangeWidgetSequence = (sourceIndex: number, destinationIndex: number) => {
+		setSelectedWidgets((listData) => {
+			let temporaryData = [...listData];
+			const [selectedRow] = temporaryData.splice(sourceIndex, 1);
+			temporaryData.splice(destinationIndex, 0, selectedRow);
+			return temporaryData;
+		});
 	};
 
 	useEffect(() => {
 		getPages();
+		getWidgets();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pageSize, currentPage]);
 
@@ -168,12 +215,17 @@ const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 		setPageSize,
 
 		// Form
+		widgets,
 		itemData,
 		formState,
-		onChangeFormState,
 		onCloseForm,
+		widgetsLoading,
+		selectedWidgets,
+		setSelectedWidgets,
 		onPageFormSubmit,
+		onChangeFormState,
 		onCofirmDeletePage,
+		onChangeWidgetSequence,
 	};
 };
 
