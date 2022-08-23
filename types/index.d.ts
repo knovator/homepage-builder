@@ -11,6 +11,7 @@ interface ProviderContextType {
 	onSuccess: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	widgetRoutesPrefix: string;
 	tilesRoutesPrefix: string;
+	pageRoutesPrefix: string;
 }
 interface ProviderContextProviderProps
 	extends React.PropsWithChildren,
@@ -23,6 +24,7 @@ interface ProviderContextProviderProps
 	) => void;
 	widgetRoutesPrefix?: string;
 	tilesRoutesPrefix?: string;
+	pageRoutesPrefix?: string;
 }
 // \ End Provider context
 
@@ -61,6 +63,38 @@ interface WidgetContextType {
 	tilesList: { [key: string]: any };
 	tilesLoading: boolean;
 	onTileFormSubmit: (state: FormActionTypes, data: any) => void;
+}
+type OptionType = { label: string; value: string };
+interface PageContextType {
+	t: (key: string) => string;
+	// Form
+	list: any[];
+	formState: FormActionTypes | undefined;
+	closeForm: () => void;
+	onPageFormSubmit: (data: any) => void;
+	onChangeFormState: (status: FormActionTypes, data?: any) => void;
+	loading: boolean;
+	canAdd: boolean;
+	canUpdate: boolean;
+	widgets: any[];
+	selectedWidgets: OptionType[];
+	setSelectedWidgets: (widgets: OptionType[]) => void;
+	onChangeWidgetSequence: (souceIndex: number, destinationIndex: number) => void;
+	// getWidgets: (searchText: string) => void;
+	// Pagination
+	currentPage: number;
+	setCurrentPage: (page: number) => void;
+	totalPages: number;
+	pageSize: number;
+	setPageSize: (size: number) => void;
+	totalRecords: number;
+	limits: number[];
+	canList: boolean;
+	// Table
+	columns: ColumnsSchema;
+	data: any;
+	loader?: JSX.Element;
+	canDelete?: boolean;
 }
 // \ End Widget context
 
@@ -117,6 +151,18 @@ interface SelectProps {
 	rest?: any;
 	required?: boolean;
 }
+interface ReactSelectProps {
+	onChange?: (opt: { value: string; label: string }[]) => void;
+	label?: string;
+	error?: string;
+	options: { value: string; label: string }[];
+	className?: string;
+	disabled?: boolean;
+	id?: string;
+	isMulti?: boolean;
+	required?: boolean;
+	selectedOptions?: { value: string; label: string }[];
+}
 interface FormProps {
 	open: boolean;
 	onClose: () => void;
@@ -134,13 +180,19 @@ interface SchemaType {
 	validations?: import("react-hook-form").RegisterOptions;
 	editable?: boolean;
 	onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file" | "url";
+	type?: "text" | "number" | "select" | "checkbox" | "textarea" | "file" | "url" | "ReactSelect";
 	options?: { value: string; label: string }[];
+	selectedOptions?: { value: string; label: string }[];
+	isMulti?: boolean;
 	defaultValue?: string | number | boolean;
 	placeholder?: string;
 	required?: boolean;
+	onChange?: (e: any) => void;
 }
 interface WidgetProps {
+	t?: any;
+}
+interface PageProps {
 	t?: any;
 }
 interface PaginationProps {

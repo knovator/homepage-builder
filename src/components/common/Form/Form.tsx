@@ -1,8 +1,9 @@
 import React, { forwardRef, MutableRefObject, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
-import { isEmpty } from "../../../helper/utils";
 import Input from "../Input";
+import { isEmpty } from "../../../helper/utils";
+import CustomReactSelect from "../Input/ReactSelect";
 
 interface FormProps {
 	schema: SchemaType[];
@@ -10,11 +11,12 @@ interface FormProps {
 	isUpdating?: boolean;
 	onSubmit: (data: any) => void;
 	enable?: boolean;
+	updates?: any;
 	ref: MutableRefObject<HTMLFormElement | null>;
 }
 
 const Form = forwardRef<HTMLFormElement | null, FormProps>(
-	({ schema, onSubmit, data, isUpdating = false, enable = true }, ref) => {
+	({ schema, onSubmit, data, isUpdating = false, enable = true, updates }, ref) => {
 		const {
 			register,
 			formState: { errors },
@@ -23,16 +25,17 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			setValue,
 			control,
 			setError,
-		} = useForm();
+		} = useForm({
+			defaultValues: data || {},
+		});
 
-		// setting data values
 		useEffect(() => {
-			if (!isEmpty(data)) {
-				schema.forEach((schemaItem) => {
-					setValue(schemaItem.accessor, data[schemaItem.accessor]);
+			if (updates) {
+				Object.keys(updates).forEach((key) => {
+					setValue(key, updates[key]);
 				});
 			}
-		}, [data, reset, schema, setValue]);
+		}, [updates]);
 
 		// setting default values
 		useEffect(() => {
@@ -53,6 +56,28 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			let input;
 			if (schema.type) {
 				switch (schema.type) {
+					case "ReactSelect":
+						input = (
+							<CustomReactSelect
+								options={schema.options!}
+								disabled={!enable}
+								label={schema.label}
+								error={errors[schema.accessor]?.message?.toString()}
+								onChange={(value) => {
+									if (value) {
+										setValue(
+											schema.accessor,
+											value.map((item) => item.value),
+										);
+										if (schema.onChange) schema.onChange(value);
+									}
+								}}
+								selectedOptions={schema.selectedOptions}
+								required={schema.required}
+								isMulti={schema.isMulti}
+							/>
+						);
+						break;
 					case "select":
 						input = (
 							<Input.Select

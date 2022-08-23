@@ -38,6 +38,11 @@ const TRANSLATION_PAIRS_COMMON = {
 	next: "Next",
 	previous: "Previous",
 	indicatesRequired: "Indicates fields are required",
+	addButtonText: "Add",
+	editButtonText: "Edit",
+	cancelButtonText: "Cancel",
+	deleteButtonText: "Delete",
+	saveButtonText: "Save",
 };
 
 const TRANSLATION_PAIRS_WIDGET = {
@@ -56,11 +61,6 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.webItems": "Web Items",
 	"widget.mobileItems": "Mobile Items",
 	"widget.searchPlaceholder": "Search Widgets...",
-	"widget.addText": "Add",
-	"widget.editText": "Edit",
-	"widget.cancelText": "Cancel",
-	"widget.deleteText": "Delete",
-	"widget.saveText": "Save",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",
@@ -74,7 +74,16 @@ const TRANSLATION_PAIRS_TILES = {
 	"tile.dragDrop": "or drag and drop",
 	"tile.allowedFormat": "PNG, JPG, SVG up to 2 MB",
 };
-
+const TRANSLATION_PAIRS_PAGE = {
+	"page.name": "Name",
+	"page.namePlaceholder": "Enter name",
+	"page.nameRequired": "Name is required",
+	"page.code": "Code",
+	"page.codePlaceholder": "Enter code",
+	"page.codeRequired": "Code is required",
+	"page.addPageTitle": "Add Page",
+	"page.updatePageTitle": "Update Page",
+};
 export {
 	CALLBACK_CODES,
 	DECIMAL_REDIX,
@@ -87,4 +96,5 @@ export {
 	PAGE_LIMITS,
 	TRANSLATION_PAIRS_WIDGET,
 	TRANSLATION_PAIRS_TILES,
+	TRANSLATION_PAIRS_PAGE,
 };
