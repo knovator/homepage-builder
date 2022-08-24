@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import Input from "../../common/Input";
-import { useWidgetState } from "../../../context/WidgetContext";
+import { usePageState } from "../../../context/PageContext";
 
-const WidgetSearch = () => {
-	const { getWidgets, t } = useWidgetState();
+const PageSearch = () => {
+	const { getPages, t } = usePageState();
 	const callerRef = useRef<NodeJS.Timeout | null>(null);
 	const [search, setSearch] = useState<string>("");
 
@@ -12,7 +12,7 @@ const WidgetSearch = () => {
 		if (callerRef.current) clearTimeout(callerRef.current);
 
 		callerRef.current = setTimeout(() => {
-			getWidgets(str);
+			getPages(str);
 		}, 300);
 	};
 
@@ -21,9 +21,9 @@ const WidgetSearch = () => {
 			type="search"
 			value={search}
 			onChange={(e) => onChangeSearch(e.target.value)}
-			placeholder={t("widget.searchPlaceholder")}
+			placeholder={t("page.searchPages")}
 		/>
 	);
 };
 
-export default WidgetSearch;
+export default PageSearch;

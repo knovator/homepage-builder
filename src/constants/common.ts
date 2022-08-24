@@ -49,8 +49,11 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.name": "Name",
 	"widget.namePlaceholder": "Enter name",
 	"widget.nameRequired": "Name is required",
-	"widget.type": "Type",
-	"widget.typeRequired": "Type is required",
+	"widget.selectionTitle": "Selection Title",
+	"widget.selectionTitlePlaceholder": "Enter Selection Title",
+	"widget.selectionTitleRequired": "Selection Title is required",
+	"widget.selectionType": "Selection Type",
+	"widget.selectionTypeRequired": "Selection Type is required",
 	"widget.code": "Code",
 	"widget.codePlaceholder": "Enter code",
 	"widget.codeRequired": "Code is required",
@@ -58,9 +61,12 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.webPerRowPlaceholder": "Enter web per row",
 	"widget.mobilePerRow": "Mobile Per Row",
 	"widget.mobilePerRowPlaceholder": "Enter mobile per row",
+	"widget.tabletPerRow": "Tablet Per Row",
+	"widget.tabletPerRowPlaceholder": "Enter tablet per row",
 	"widget.webItems": "Web Items",
 	"widget.mobileItems": "Mobile Items",
 	"widget.searchPlaceholder": "Search Widgets...",
+	"widget.autoPlay": "Auto Play",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",
@@ -83,6 +89,7 @@ const TRANSLATION_PAIRS_PAGE = {
 	"page.codeRequired": "Code is required",
 	"page.addPageTitle": "Add Page",
 	"page.updatePageTitle": "Update Page",
+	"page.searchPages": "Search Pages...",
 };
 export {
 	CALLBACK_CODES,

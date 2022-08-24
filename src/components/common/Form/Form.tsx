@@ -1,5 +1,5 @@
 import React, { forwardRef, MutableRefObject, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, EventType } from "react-hook-form";
 
 import Input from "../Input";
 import { isEmpty } from "../../../helper/utils";
@@ -13,10 +13,11 @@ interface FormProps {
 	enable?: boolean;
 	updates?: any;
 	ref: MutableRefObject<HTMLFormElement | null>;
+	watcher?: (value: any, name: string | undefined, type: EventType | undefined) => void;
 }
 
 const Form = forwardRef<HTMLFormElement | null, FormProps>(
-	({ schema, onSubmit, data, isUpdating = false, enable = true, updates }, ref) => {
+	({ schema, onSubmit, data, isUpdating = false, enable = true, updates, watcher }, ref) => {
 		const {
 			register,
 			formState: { errors },
@@ -25,9 +26,17 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			setValue,
 			control,
 			setError,
+			watch,
 		} = useForm({
 			defaultValues: data || {},
 		});
+
+		React.useEffect(() => {
+			if (watcher) {
+				const subscription = watch((value, { name, type }) => watcher(value, name, type));
+				return () => subscription.unsubscribe();
+			}
+		}, [watch]);
 
 		useEffect(() => {
 			if (updates) {
@@ -54,6 +63,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 
 		const inputRenderer = (schema: SchemaType) => {
 			let input;
+			if (typeof schema.show !== "undefined" && !schema.show) return null;
 			if (schema.type) {
 				switch (schema.type) {
 					case "ReactSelect":
@@ -75,6 +85,17 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								selectedOptions={schema.selectedOptions}
 								required={schema.required}
 								isMulti={schema.isMulti}
+							/>
+						);
+						break;
+					case "checkbox":
+						input = (
+							<Input.Checkbox
+								error={errors[schema.accessor]?.message?.toString()}
+								label={schema.label}
+								rest={register(schema.accessor, schema.validations || {})}
+								className="block"
+								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
 							/>
 						);
 						break;
@@ -149,7 +170,9 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 						if (isUpdating && typeof schemaItem.editable !== "undefined" && !schemaItem.editable)
 							return values;
 
-						values[schemaItem.accessor] = data[schemaItem.accessor];
+						if (schemaItem.type === "number")
+							values[schemaItem.accessor] = parseInt(data[schemaItem.accessor]);
+						else values[schemaItem.accessor] = data[schemaItem.accessor];
 						return values;
 					},
 					{},

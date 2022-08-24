@@ -17,6 +17,7 @@ const PageContextProvider = ({
 	widgets = [],
 	formState = "",
 	closeForm = () => {},
+	getPages = () => {},
 	loading = false,
 	onChangeFormState = () => {},
 	onPageFormSubmit = () => {},
@@ -60,6 +61,7 @@ const PageContextProvider = ({
 				setSelectedWidgets,
 				onChangeWidgetSequence,
 				// Pagination
+				getPages,
 				currentPage,
 				limits,
 				pageSize,

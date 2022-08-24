@@ -80,7 +80,7 @@ interface PageContextType {
 	selectedWidgets: OptionType[];
 	setSelectedWidgets: (widgets: OptionType[]) => void;
 	onChangeWidgetSequence: (souceIndex: number, destinationIndex: number) => void;
-	// getWidgets: (searchText: string) => void;
+	getPages: (searchText: string) => void;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -138,6 +138,13 @@ interface InputProps {
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
+interface CheckboxProps {
+	rest?: any;
+	label?: string;
+	error?: string;
+	className?: string;
+	disabled?: boolean;
+}
 interface SelectProps {
 	value?: string | number;
 	onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -188,6 +195,7 @@ interface SchemaType {
 	placeholder?: string;
 	required?: boolean;
 	onChange?: (e: any) => void;
+	show?: boolean;
 }
 interface WidgetProps {
 	t?: any;
@@ -233,10 +241,12 @@ interface ImageUploadProps {
 	error?: string;
 }
 // Table
+type CellInputType = ({ row, onUpdate }: { row: any; onUpdate: (row: any) => void }) => JSX.Element | null | string;
 type TableDataItemFormat = {
 	label: string;
 	dataKey: string;
 	highlight?: boolean;
+	Cell?: CellInputType;
 };
 interface TableProps {
 	data: any[];

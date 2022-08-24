@@ -5,6 +5,7 @@ import PageContextProvider from "../../../context/PageContext";
 import { TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_PAGE } from "../../../constants/common";
 
 import Table from "../Table";
+import Search from "../Search";
 import PageForm from "../Form";
 import AddButton from "../AddButton";
 import Pagination from "../Pagination";
@@ -33,6 +34,7 @@ const Page = ({ t }: PageProps) => {
 		setSelectedWidgets,
 		onCofirmDeletePage,
 		onChangeWidgetSequence,
+		getPages,
 	} = usePage({
 		defaultLimit: 10,
 	});
@@ -54,8 +56,10 @@ const Page = ({ t }: PageProps) => {
 			selectedWidgets={selectedWidgets}
 			setSelectedWidgets={setSelectedWidgets}
 			onChangeWidgetSequence={onChangeWidgetSequence}
+			getPages={getPages}
 		>
 			<AddButton />
+			<Search />
 			<div className="khb_table-wrapper">
 				<Table />
 				<Pagination />
