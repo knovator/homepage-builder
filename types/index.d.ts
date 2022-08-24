@@ -80,7 +80,7 @@ interface PageContextType {
 	selectedWidgets: OptionType[];
 	setSelectedWidgets: (widgets: OptionType[]) => void;
 	onChangeWidgetSequence: (souceIndex: number, destinationIndex: number) => void;
-	// getWidgets: (searchText: string) => void;
+	getPages: (searchText: string) => void;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;

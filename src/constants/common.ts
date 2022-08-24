@@ -89,6 +89,7 @@ const TRANSLATION_PAIRS_PAGE = {
 	"page.codeRequired": "Code is required",
 	"page.addPageTitle": "Add Page",
 	"page.updatePageTitle": "Update Page",
+	"page.searchPages": "Search Pages...",
 };
 export {
 	CALLBACK_CODES,

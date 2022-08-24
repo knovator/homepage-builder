@@ -4,14 +4,36 @@ import * as ReactDOM from "react-dom/client";
 import { Widget, Provider, Page } from "../.";
 
 const App = () => {
+	const [selectedType, setSelectedType] = React.useState("widget");
 	return (
-		<Provider baseUrl="http://localhost:8080">
-			<h1>Widget</h1>
-			<Widget />
-			<hr />
-			{/* <h1>Page</h1>
-			<Page /> */}
-		</Provider>
+		<>
+			<div className="form-group">
+				<label htmlFor="widget">
+					<input
+						type="radio"
+						value="widget"
+						id="widget"
+						checked={selectedType === "widget"}
+						onChange={(e) => setSelectedType(e.target.value)}
+					/>
+					Widget
+				</label>
+				<label htmlFor="page">
+					<input
+						type="radio"
+						value="page"
+						id="page"
+						checked={selectedType === "page"}
+						onChange={(e) => setSelectedType(e.target.value)}
+					/>
+					Page
+				</label>
+			</div>
+			<Provider baseUrl="http://localhost:8080">
+				{selectedType === "widget" && <Widget />}
+				{selectedType === "page" && <Page />}
+			</Provider>
+		</>
 	);
 };
 
