@@ -14,12 +14,14 @@ const ImageUpload = ({
 	onImageUpload,
 	onImageRemove,
 	baseUrl,
+	disabled = false,
 }: ImageUploadProps) => {
 	const [img, setImg] = useState<string | undefined>(undefined);
 	const { getRootProps, getInputProps } = useDropzone({
 		// accept: {
 		//   "image/*": [".jpeg,.jpg,.png"],
 		// },
+		noClick: true,
 		multiple: false,
 		minSize: 0,
 		maxSize,
@@ -67,7 +69,7 @@ const ImageUpload = ({
 		return (
 			<div className="khb_img-wrapper">
 				<img src={`${fileUrl}`} alt="" className="khb_img-wrapper-img" />
-				<button onClick={onRemoveFile} className="khb_img-wrapper-del">
+				<button disabled={disabled} onClick={onRemoveFile} className="khb_img-wrapper-del">
 					<SmallCancel />
 				</button>
 			</div>
@@ -86,7 +88,7 @@ const ImageUpload = ({
 								className,
 							})}
 						>
-							<input {...getInputProps()} id="file-upload" />
+							<input disabled={disabled} {...getInputProps()} id="file-upload" />
 							{text}
 						</div>
 					)}

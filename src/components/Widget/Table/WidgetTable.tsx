@@ -4,7 +4,7 @@ import ToggleWidget from "../../common/Toggle";
 import { useWidgetState } from "../../../context/WidgetContext";
 
 const WidgetTable = () => {
-	const { list, onChangeFormState, onPartialUpdateWidget, loading, loader, t } = useWidgetState();
+	const { list, canList, onChangeFormState, onPartialUpdateWidget, loading, loader, t } = useWidgetState();
 	const updateClosure = useCallback(
 		(item: any, key: string, value: any) => {
 			onPartialUpdateWidget({ [key]: value }, item._id);
@@ -13,6 +13,8 @@ const WidgetTable = () => {
 	);
 	const onUpdateClick = (item: any) => onChangeFormState("UPDATE", item);
 	const onDeleteClick = (item: any) => onChangeFormState("DELETE", item);
+
+	if (!canList) return null;
 	return (
 		<Table
 			data={list}

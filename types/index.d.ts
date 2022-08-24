@@ -5,7 +5,7 @@ declare module "@knovator/homepage-builder" {
 	const Page: (props: PageProps) => JSX.Element;
 }
 
-// Provider context
+// context
 interface ProviderContextType {
 	baseUrl: string;
 	token: string | (() => Promise<string>);
@@ -30,9 +30,6 @@ interface ProviderContextProviderProps
 	tilesRoutesPrefix?: string;
 	pageRoutesPrefix?: string;
 }
-// \ End Provider context
-
-// Widget context
 interface WidgetContextType {
 	t: (key: string) => string;
 	loader: any;
@@ -58,8 +55,9 @@ interface WidgetContextType {
 	setPageSize: (size: number) => void;
 	totalRecords: number;
 	limits: number[];
-	canList: boolean;
 	// Table
+	canList: boolean;
+	canPartialUpdate: boolean;
 	columns: ColumnsSchema;
 	data: any;
 	loader?: JSX.Element;
@@ -95,14 +93,14 @@ interface PageContextType {
 	setPageSize: (size: number) => void;
 	totalRecords: number;
 	limits: number[];
-	canList: boolean;
 	// Table
+	canList: boolean;
 	columns: ColumnsSchema;
 	data: any;
 	loader?: JSX.Element;
 	canDelete?: boolean;
 }
-// \ End Widget context
+// \ End context
 
 // Components
 interface DrawerProps {
@@ -185,6 +183,7 @@ interface InputRendererProps {
 	field: import("react-hook-form").ControllerRenderProps;
 	error?: string;
 	setError: (msg: string) => void;
+	disabled?: boolean;
 }
 interface SchemaType {
 	label?: string;
@@ -206,10 +205,12 @@ interface SchemaType {
 interface WidgetProps {
 	t?: any;
 	loader?: any;
+	permissions?: PermissionsObj;
 }
 interface PageProps {
 	t?: any;
 	loader?: any;
+	permissions?: PermissionsObj;
 }
 interface PaginationProps {
 	totalPages: number;
@@ -251,6 +252,7 @@ interface ImageUploadProps {
 	onImageRemove?: (id: string) => Promise<void>;
 	baseUrl: string;
 	error?: string;
+	disabled?: boolean;
 }
 // Table
 type CellInputType = (parameters: { row: any; onUpdate?: (row: any) => void }) => JSX.Element | null | string;
@@ -311,3 +313,11 @@ type FormActionTypes = "ADD" | "UPDATE" | "DELETE" | null | "";
 // \ End Hooks
 
 type TFunc = (key: string) => string;
+
+interface PermissionsObj {
+	list: boolean;
+	add: boolean;
+	update: boolean;
+	partialUpdate: boolean;
+	delete: boolean;
+}

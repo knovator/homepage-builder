@@ -20,9 +20,8 @@ enum CALLBACK_CODES {
 const DEFAULT_PERMISSIONS = {
 	list: true,
 	add: true,
-	destroy: true,
+	delete: true,
 	partialUpdate: true,
-	sequencing: false,
 	update: true,
 };
 
@@ -73,6 +72,8 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.tableName": "Name",
 	"widget.tableCode": "Code",
 	"widget.tableActive": "Active",
+	"widget.addWidgetTitle": "Add Widget",
+	"widget.updateWidgetTitle": "Update Widget",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",

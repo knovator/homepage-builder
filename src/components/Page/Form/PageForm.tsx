@@ -10,8 +10,17 @@ import { usePageState } from "../../../context/PageContext";
 import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
 
 const PageForm = ({ onClose, open, formState }: FormProps) => {
-	const { t, data, onPageFormSubmit, selectedWidgets, setSelectedWidgets, widgets, onChangeWidgetSequence } =
-		usePageState();
+	const {
+		t,
+		data,
+		onPageFormSubmit,
+		selectedWidgets,
+		setSelectedWidgets,
+		widgets,
+		onChangeWidgetSequence,
+		canAdd,
+		canUpdate,
+	} = usePageState();
 	const pageFormRef = useRef<HTMLFormElement | null>(null);
 
 	// Form Utility Functions
@@ -70,6 +79,7 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 		},
 	];
 
+	if (!canAdd && !canUpdate) return null;
 	return (
 		<Drawer
 			open={open}

@@ -29,8 +29,9 @@ const WidgetContextProvider = ({
 	setPageSize = () => {},
 	totalPages = 0,
 	totalRecords = 0,
-	canList = false,
 	// Table
+	canList = false,
+	canPartialUpdate = false,
 	columns = [],
 	data = [],
 	canDelete = false,
@@ -70,8 +71,9 @@ const WidgetContextProvider = ({
 				setPageSize,
 				totalPages,
 				totalRecords,
-				canList,
 				// Table
+				canList,
+				canPartialUpdate,
 				columns,
 				data,
 				canDelete,
