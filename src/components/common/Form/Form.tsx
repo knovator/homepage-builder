@@ -149,6 +149,9 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								schema.Input!({
 									field,
 									error: errors[schema.accessor]?.message?.toString(),
+									disabled:
+										(isUpdating && typeof schema.editable !== "undefined" && !schema.editable) ||
+										!enable,
 									setError: (msg) =>
 										setError.call(null, schema.accessor, { type: "custom", message: msg }),
 								})

@@ -21,13 +21,13 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 	const [itemData, setItemData] = useState<any | null>(null);
 	const [formState, setFormState] = useState<FormActionTypes>();
 
-	const { baseUrl, token, onError, onSuccess, widgetRoutesPrefix, tilesRoutesPrefix } = useProviderState();
+	const { baseUrl, token, onError, onSuccess, onLogout, widgetRoutesPrefix, tilesRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
 
 	const handleError = (code: CALLBACK_CODES) => (error: any) => {
 		const { data = {} } = error?.response || {};
 		if (data?.code === "UNAUTHENTICATED") {
-			// onLogout();
+			onLogout();
 		}
 		onError(code, "error", data?.message);
 	};

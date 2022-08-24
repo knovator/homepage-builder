@@ -11,7 +11,7 @@ import AddButton from "../AddButton";
 import Pagination from "../Pagination";
 import DeleteModal from "../../common/DeleteModal";
 
-const Page = ({ t }: PageProps) => {
+const Page = ({ t, loader, permissions }: PageProps) => {
 	const derivedT = createTranslation(t, {
 		...TRANSLATION_PAIRS_COMMON,
 		...TRANSLATION_PAIRS_PAGE,
@@ -42,6 +42,7 @@ const Page = ({ t }: PageProps) => {
 	return (
 		<PageContextProvider
 			t={derivedT}
+			loader={loader}
 			list={list}
 			widgets={widgets}
 			data={itemData}
@@ -57,6 +58,11 @@ const Page = ({ t }: PageProps) => {
 			setSelectedWidgets={setSelectedWidgets}
 			onChangeWidgetSequence={onChangeWidgetSequence}
 			getPages={getPages}
+			// permissions
+			canAdd={permissions?.add}
+			canDelete={permissions?.delete}
+			canUpdate={permissions?.update}
+			canList={permissions?.list}
 		>
 			<AddButton />
 			<Search />

@@ -16,6 +16,8 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		t,
 		onWidgetFormSubmit,
 		data,
+		canAdd,
+		canUpdate,
 		tilesList,
 		tilesLoading,
 		onTileFormSubmit,
@@ -150,7 +152,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		{
 			label: t("tile.image"),
 			accessor: "img",
-			Input: ({ field, error, setError }) => (
+			Input: ({ field, error, setError, disabled }) => (
 				<ImageUpload
 					imgId={field.value}
 					maxSize={10_485_760}
@@ -160,6 +162,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 						field.onChange(value);
 					}}
 					baseUrl={baseUrl}
+					disabled={disabled}
 					text={
 						<>
 							<div className="khb_img-text-wrapper">
@@ -179,11 +182,18 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		},
 	];
 
+	if (!canAdd || !canUpdate) return null;
 	return (
 		<Drawer
 			open={open}
 			onClose={onClose}
-			title={formState === "ADD" ? "Add Widget" : formState === "UPDATE" ? "Update Widget" : ""}
+			title={
+				formState === "ADD"
+					? t("widget.addWidgetTitle")
+					: formState === "UPDATE"
+					? t("widget.updateWidgetTitle")
+					: ""
+			}
 			footerContent={
 				<>
 					<Button type="secondary" onClick={onClose}>
@@ -221,6 +231,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Web"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
+					addText={t("addButtonText")}
 					cancelText={t("cancelButtonText")}
 					saveText={t("saveButtonText")}
 					editText={t("editButtonText")}
@@ -240,6 +251,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Mobile"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
+					addText={t("addButtonText")}
 					cancelText={t("cancelButtonText")}
 					saveText={t("saveButtonText")}
 					editText={t("editButtonText")}

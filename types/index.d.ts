@@ -1,36 +1,38 @@
 declare module "@knovator/api";
 declare module "@knovator/homepage-builder" {
 	const Provider: (props: ProviderContextProviderProps) => JSX.Element;
+	const Widget: (props: WidgetProps) => JSX.Element;
+	const Page: (props: PageProps) => JSX.Element;
 }
 
-// Provider context
+// context
 interface ProviderContextType {
 	baseUrl: string;
 	token: string | (() => Promise<string>);
 	onError: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	onSuccess: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
+	onLogout: () => void;
 	widgetRoutesPrefix: string;
 	tilesRoutesPrefix: string;
 	pageRoutesPrefix: string;
 }
 interface ProviderContextProviderProps
 	extends React.PropsWithChildren,
-		Omit<ProviderContextType, "onError" | "onSuccess" | "widgetRoutesPrefix" | "tilesRoutesPrefix"> {
+		Omit<ProviderContextType, "onError" | "onSuccess" | "onLogout" | "widgetRoutesPrefix" | "tilesRoutesPrefix"> {
 	onError?: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	onSuccess?: (
 		callback_code: import("../src/constants/common").CALLBACK_CODES,
 		code: string,
 		message: string,
 	) => void;
+	onLogout?: () => void;
 	widgetRoutesPrefix?: string;
 	tilesRoutesPrefix?: string;
 	pageRoutesPrefix?: string;
 }
-// \ End Provider context
-
-// Widget context
 interface WidgetContextType {
 	t: (key: string) => string;
+	loader: any;
 	// Form
 	list: any[];
 	formState: FormActionTypes | undefined;
@@ -53,8 +55,9 @@ interface WidgetContextType {
 	setPageSize: (size: number) => void;
 	totalRecords: number;
 	limits: number[];
-	canList: boolean;
 	// Table
+	canList: boolean;
+	canPartialUpdate: boolean;
 	columns: ColumnsSchema;
 	data: any;
 	loader?: JSX.Element;
@@ -90,14 +93,14 @@ interface PageContextType {
 	setPageSize: (size: number) => void;
 	totalRecords: number;
 	limits: number[];
-	canList: boolean;
 	// Table
+	canList: boolean;
 	columns: ColumnsSchema;
 	data: any;
 	loader?: JSX.Element;
 	canDelete?: boolean;
 }
-// \ End Widget context
+// \ End context
 
 // Components
 interface DrawerProps {
@@ -180,6 +183,7 @@ interface InputRendererProps {
 	field: import("react-hook-form").ControllerRenderProps;
 	error?: string;
 	setError: (msg: string) => void;
+	disabled?: boolean;
 }
 interface SchemaType {
 	label?: string;
@@ -200,9 +204,13 @@ interface SchemaType {
 }
 interface WidgetProps {
 	t?: any;
+	loader?: any;
+	permissions?: PermissionsObj;
 }
 interface PageProps {
 	t?: any;
+	loader?: any;
+	permissions?: PermissionsObj;
 }
 interface PaginationProps {
 	totalPages: number;
@@ -210,6 +218,9 @@ interface PaginationProps {
 	currentPage: number;
 	pageSize: number;
 	setCurrentPage: (value: number) => void;
+	showingText?: string;
+	pageText?: string;
+	ofText?: string;
 }
 interface TileItemsAccordianProps {
 	id: string;
@@ -223,6 +234,7 @@ interface TileItemsAccordianProps {
 	toggleShow: (status: boolean) => void;
 	onDataSubmit: (state: FormActionTypes, data: any, updateId?: string) => void;
 	onDelete: (id: string) => void;
+	addText?: string;
 	editText?: string;
 	cancelText?: string;
 	deleteText?: string;
@@ -240,6 +252,7 @@ interface ImageUploadProps {
 	onImageRemove?: (id: string) => Promise<void>;
 	baseUrl: string;
 	error?: string;
+	disabled?: boolean;
 }
 // Table
 type CellInputType = (parameters: { row: any; onUpdate?: (row: any) => void }) => JSX.Element | null | string;
@@ -252,6 +265,8 @@ type TableDataItemFormat = {
 interface TableProps {
 	data: any[];
 	dataKeys: TableDataItemFormat[];
+	loading?: boolean;
+	loader?: any;
 	actions?: {
 		edit?: (data: { [key: string]: any }) => void;
 		delete?: (data: { [key: string]: any }) => void;
@@ -298,3 +313,11 @@ type FormActionTypes = "ADD" | "UPDATE" | "DELETE" | null | "";
 // \ End Hooks
 
 type TFunc = (key: string) => string;
+
+interface PermissionsObj {
+	list: boolean;
+	add: boolean;
+	update: boolean;
+	partialUpdate: boolean;
+	delete: boolean;
+}

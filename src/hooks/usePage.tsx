@@ -22,13 +22,13 @@ const usePage = ({ defaultLimit, routes, preConfirmDelete }: UsePageProps) => {
 	const [itemData, setItemData] = useState<any | null>(null);
 	const [formState, setFormState] = useState<FormActionTypes>();
 
-	const { baseUrl, token, onError, onSuccess, pageRoutesPrefix, widgetRoutesPrefix } = useProviderState();
+	const { baseUrl, token, onError, onSuccess, onLogout, pageRoutesPrefix, widgetRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
 
 	const handleError = (code: CALLBACK_CODES) => (error: any) => {
 		const { data = {} } = error?.response || {};
 		if (data?.code === "UNAUTHENTICATED") {
-			// onLogout();
+			onLogout();
 		}
 		onError(code, "error", data?.message);
 	};

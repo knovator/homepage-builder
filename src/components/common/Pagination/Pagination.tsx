@@ -1,10 +1,20 @@
 import React, { useState } from "react";
+import { TRANSLATION_PAIRS_COMMON } from "../../../constants/common";
 import ChevronLeft from "../../../icons/chevronLeft";
 import ChevronRight from "../../../icons/chevronRight";
 import Button from "../Button";
 import Input from "../Input";
 
-const Pagination = ({ currentPage, pageSize, totalPages, totalRecords, setCurrentPage }: PaginationProps) => {
+const Pagination = ({
+	currentPage,
+	pageSize,
+	totalPages,
+	totalRecords,
+	setCurrentPage,
+	showingText = TRANSLATION_PAIRS_COMMON.showing,
+	pageText = TRANSLATION_PAIRS_COMMON.page,
+	ofText = TRANSLATION_PAIRS_COMMON.of,
+}: PaginationProps) => {
 	const [localCurrentPage, setLocalCurrentPage] = useState(currentPage);
 	const updatePagination = () => {
 		let newValue: number | string | undefined = localCurrentPage;
@@ -21,16 +31,16 @@ const Pagination = ({ currentPage, pageSize, totalPages, totalRecords, setCurren
 	return (
 		<nav className="khb_pagination" aria-label="Table navigation">
 			<span className="khb_pagination-total">
-				Showing <span className="khb_pagination-total-showing">{(currentPage - 1) * pageSize + 1}</span> -{" "}
+				{showingText} <span className="khb_pagination-total-showing">{(currentPage - 1) * pageSize + 1}</span> -{" "}
 				<span className="khb_pagination-total-showing">{Math.min(currentPage * pageSize, totalRecords)}</span>{" "}
-				of {totalRecords}
+				{ofText} {totalRecords}
 			</span>
 			<ul className="khb_pagination-actions">
 				<Button size="xs" type="secondary" disabled={currentPage - 1 === 0}>
 					<ChevronLeft srText="Previous" />
 				</Button>
 				<div className="khb_pagination-pager">
-					Page{" "}
+					{pageText}{" "}
 					<Input
 						className="mx-2"
 						size="xs"

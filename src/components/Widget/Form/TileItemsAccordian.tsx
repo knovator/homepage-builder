@@ -15,6 +15,7 @@ const TileItemsAccordian = ({
 	tileType,
 	widgetId,
 	onDelete,
+	addText = "Add",
 	saveText = "Save",
 	cancelText = "Cancel",
 	deleteText = "Delete",
@@ -87,7 +88,7 @@ const TileItemsAccordian = ({
 			id={id}
 			footerContent={
 				<Button size="sm" onClick={onTileAddClick} disabled={!widgetId}>
-					Add
+					{addText}
 				</Button>
 			}
 		>

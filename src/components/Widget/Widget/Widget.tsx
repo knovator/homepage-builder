@@ -2,7 +2,12 @@ import React from "react";
 import useWidget from "../../../hooks/useWidget";
 import WidgetContextProvider from "../../../context/WidgetContext";
 import { createTranslation } from "../../../helper/utils";
-import { TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_WIDGET, TRANSLATION_PAIRS_TILES } from "../../../constants/common";
+import {
+	TRANSLATION_PAIRS_COMMON,
+	TRANSLATION_PAIRS_WIDGET,
+	TRANSLATION_PAIRS_TILES,
+	DEFAULT_PERMISSIONS,
+} from "../../../constants/common";
 
 import Table from "../Table";
 import WidgetForm from "../Form";
@@ -11,7 +16,7 @@ import Pagination from "../Pagination";
 import WidgetSearch from "../Search";
 import DeleteModal from "../../common/DeleteModal";
 
-const Widget = ({ t }: WidgetProps) => {
+const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) => {
 	const derivedT = createTranslation(t, {
 		...TRANSLATION_PAIRS_COMMON,
 		...TRANSLATION_PAIRS_WIDGET,
@@ -50,6 +55,7 @@ const Widget = ({ t }: WidgetProps) => {
 			list={list}
 			onChangeFormState={onChangeFormState}
 			t={derivedT}
+			loader={loader}
 			onWidgetFormSubmit={onWidgetFormSubmit}
 			data={itemData}
 			onDeleteTile={onDeleteTile}
@@ -67,6 +73,12 @@ const Widget = ({ t }: WidgetProps) => {
 			tilesList={tilesList}
 			tilesLoading={tilesLoading}
 			onTileFormSubmit={onTileFormSubmit}
+			// Permissions
+			canAdd={permissions.add}
+			canDelete={permissions.delete}
+			canList={permissions.list}
+			canUpdate={permissions.update}
+			canPartialUpdate={permissions.partialUpdate}
 		>
 			<AddButton />
 			<WidgetSearch />
