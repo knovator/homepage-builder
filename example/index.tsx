@@ -6,11 +6,11 @@ import { Widget, Provider, Page } from "../.";
 const App = () => {
 	return (
 		<Provider baseUrl="http://localhost:8080">
-			{/* <h1>Widget</h1>
+			<h1>Widget</h1>
 			<Widget />
-			<hr /> */}
-			<h1>Page</h1>
-			<Page />
+			<hr />
+			{/* <h1>Page</h1>
+			<Page /> */}
 		</Provider>
 	);
 };

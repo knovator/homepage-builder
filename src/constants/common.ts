@@ -58,6 +58,8 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.webPerRowPlaceholder": "Enter web per row",
 	"widget.mobilePerRow": "Mobile Per Row",
 	"widget.mobilePerRowPlaceholder": "Enter mobile per row",
+	"widget.tabletPerRow": "Tablet Per Row",
+	"widget.tabletPerRowPlaceholder": "Enter tablet per row",
 	"widget.webItems": "Web Items",
 	"widget.mobileItems": "Mobile Items",
 	"widget.searchPlaceholder": "Search Widgets...",

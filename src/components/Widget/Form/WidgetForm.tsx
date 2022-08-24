@@ -92,6 +92,12 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			type: "number",
 			placeholder: t("widget.mobilePerRowPlaceholder"),
 		},
+		{
+			label: t("widget.tabletPerRow"),
+			accessor: "tabletPerRow",
+			type: "number",
+			placeholder: t("widget.tabletPerRowPlaceholder"),
+		},
 	];
 	const tileFormSchema: SchemaType[] = [
 		{
