@@ -278,6 +278,31 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 			onError(code, INTERNAL_ERROR_CODE, (error as Error).message);
 		}
 	};
+	const onPartialUpdateWidget = async (data: any, id: string) => {
+		try {
+			let api = getApiType({
+				routes,
+				action: "PARTIAL_UPDATE",
+				prefix: widgetRoutesPrefix,
+				id,
+			});
+			let response = await request({
+				baseUrl,
+				token,
+				data,
+				url: api.url,
+				method: api.method,
+				onError: handleError(CALLBACK_CODES.PARTIAL_UPDATE),
+			});
+			if (response?.code === "SUCCESS") {
+				setList((oldListData) => oldListData.map((item) => (item._id === id ? response.data : item)));
+			} else {
+				onError(CALLBACK_CODES.PARTIAL_UPDATE, response?.code, response?.message);
+			}
+		} catch (error) {
+			onError(CALLBACK_CODES.PARTIAL_UPDATE, INTERNAL_ERROR_CODE, (error as Error).message);
+		}
+	};
 
 	useEffect(() => {
 		getWidgets();
@@ -306,6 +331,7 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		onDeleteTile,
 		onWidgetFormSubmit,
 		onCofirmDeleteWidget,
+		onPartialUpdateWidget,
 		onImageUpload,
 		onImageRemove,
 

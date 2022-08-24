@@ -30,6 +30,7 @@ const Widget = ({ t }: WidgetProps) => {
 		onDeleteTile,
 		onImageRemove,
 		onImageUpload,
+		onPartialUpdateWidget,
 		// Pagination
 		totalPages,
 		totalRecords,
@@ -55,6 +56,7 @@ const Widget = ({ t }: WidgetProps) => {
 			getWidgets={getWidgets}
 			onImageRemove={onImageRemove}
 			onImageUpload={onImageUpload}
+			onPartialUpdateWidget={onPartialUpdateWidget}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}

@@ -40,6 +40,7 @@ const WidgetContextProvider = ({
 	data = [],
 	canDelete = false,
 	loader = undefined,
+	onPartialUpdateWidget = () => Promise.resolve(),
 	// Tile
 	tilesList = { web: [], mobile: [] },
 	tilesLoading = false,
@@ -65,6 +66,7 @@ const WidgetContextProvider = ({
 				getWidgets,
 				onImageUpload,
 				onImageRemove,
+				onPartialUpdateWidget,
 				// Pagination
 				currentPage,
 				limits,
