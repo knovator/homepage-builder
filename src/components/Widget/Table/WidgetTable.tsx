@@ -4,7 +4,7 @@ import ToggleWidget from "../../common/Toggle";
 import { useWidgetState } from "../../../context/WidgetContext";
 
 const WidgetTable = () => {
-	const { list, onChangeFormState, onPartialUpdateWidget } = useWidgetState();
+	const { list, onChangeFormState, onPartialUpdateWidget, loading, loader } = useWidgetState();
 	const updateClosure = useCallback(
 		(item: any, key: string, value: any) => {
 			onPartialUpdateWidget({ [key]: value }, item._id);
@@ -16,6 +16,8 @@ const WidgetTable = () => {
 	return (
 		<Table
 			data={list}
+			loader={loader}
+			loading={loading}
 			dataKeys={[
 				{ label: "Name", dataKey: "name", highlight: true },
 				{ label: "Code", dataKey: "code" },

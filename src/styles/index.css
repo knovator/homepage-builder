@@ -44,6 +44,13 @@
     /* \ End of Buttons */
 
     /* Table */
+    .khb_table-container {
+        @apply overflow-hidden bg-white border rounded-lg border-gray-200;
+    }
+    .khb_table-height {
+        @apply justify-center overflow-auto;
+        height: calc(100vh - 252px);
+    }
     .khb_table-wrapper {
         @apply overflow-x-auto relative shadow-md sm:rounded-lg;
     }

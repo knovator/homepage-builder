@@ -1,6 +1,8 @@
 declare module "@knovator/api";
 declare module "@knovator/homepage-builder" {
 	const Provider: (props: ProviderContextProviderProps) => JSX.Element;
+	const Widget: (props: WidgetProps) => JSX.Element;
+	const Page: (props: PageProps) => JSX.Element;
 }
 
 // Provider context
@@ -31,6 +33,7 @@ interface ProviderContextProviderProps
 // Widget context
 interface WidgetContextType {
 	t: (key: string) => string;
+	loader: any;
 	// Form
 	list: any[];
 	formState: FormActionTypes | undefined;
@@ -200,9 +203,11 @@ interface SchemaType {
 }
 interface WidgetProps {
 	t?: any;
+	loader?: any;
 }
 interface PageProps {
 	t?: any;
+	loader?: any;
 }
 interface PaginationProps {
 	totalPages: number;
@@ -252,6 +257,8 @@ type TableDataItemFormat = {
 interface TableProps {
 	data: any[];
 	dataKeys: TableDataItemFormat[];
+	loading?: boolean;
+	loader?: any;
 	actions?: {
 		edit?: (data: { [key: string]: any }) => void;
 		delete?: (data: { [key: string]: any }) => void;

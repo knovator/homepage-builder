@@ -1,17 +1,12 @@
 import React, { createContext, useContext } from "react";
-import { PAGE_LIMITS, TRANSLATION_PAIRS_COMMON } from "../constants/common";
+import { PAGE_LIMITS } from "../constants/common";
 
 interface WidgetContextProviderProps extends React.PropsWithChildren, Partial<WidgetContextType> {}
 
 const WidgetContext = createContext<WidgetContextType | null>(null);
 
 const WidgetContextProvider = ({
-	t = (key: string) =>
-		((
-			{
-				...TRANSLATION_PAIRS_COMMON,
-			} as any
-		)[key]),
+	t = () => "",
 	// Form
 	list = [],
 	formState = "",
@@ -39,7 +34,7 @@ const WidgetContextProvider = ({
 	columns = [],
 	data = [],
 	canDelete = false,
-	loader = undefined,
+	loader = null,
 	onPartialUpdateWidget = () => Promise.resolve(),
 	// Tile
 	tilesList = { web: [], mobile: [] },

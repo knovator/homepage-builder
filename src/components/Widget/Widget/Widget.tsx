@@ -11,7 +11,7 @@ import Pagination from "../Pagination";
 import WidgetSearch from "../Search";
 import DeleteModal from "../../common/DeleteModal";
 
-const Widget = ({ t }: WidgetProps) => {
+const Widget = ({ t, loader }: WidgetProps) => {
 	const derivedT = createTranslation(t, {
 		...TRANSLATION_PAIRS_COMMON,
 		...TRANSLATION_PAIRS_WIDGET,
@@ -50,6 +50,7 @@ const Widget = ({ t }: WidgetProps) => {
 			list={list}
 			onChangeFormState={onChangeFormState}
 			t={derivedT}
+			loader={loader}
 			onWidgetFormSubmit={onWidgetFormSubmit}
 			data={itemData}
 			onDeleteTile={onDeleteTile}
