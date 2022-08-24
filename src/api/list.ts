@@ -11,6 +11,10 @@ const apiList = {
 		url: `${prefix}/${id}`,
 		method: "PUT",
 	}),
+	PARTIAL_UPDATE: ({ prefix, id }: API_INPUT_TYPE) => ({
+		url: `${prefix}/${id}`,
+		method: "PATCH",
+	}),
 	DELETE: ({ prefix, id }: API_INPUT_TYPE) => ({
 		url: `${prefix}/${id}`,
 		method: "DELETE",

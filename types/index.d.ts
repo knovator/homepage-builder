@@ -59,6 +59,7 @@ interface WidgetContextType {
 	data: any;
 	loader?: JSX.Element;
 	canDelete?: boolean;
+	onPartialUpdateWidget: (data: any, id: string) => Promise<void>;
 	// Tile
 	tilesList: { [key: string]: any };
 	tilesLoading: boolean;
@@ -241,7 +242,7 @@ interface ImageUploadProps {
 	error?: string;
 }
 // Table
-type CellInputType = ({ row, onUpdate }: { row: any; onUpdate: (row: any) => void }) => JSX.Element | null | string;
+type CellInputType = (parameters: { row: any; onUpdate?: (row: any) => void }) => JSX.Element | null | string;
 type TableDataItemFormat = {
 	label: string;
 	dataKey: string;
@@ -260,7 +261,15 @@ interface TableProps {
 // \ End Components
 
 // API
-type ACTION_TYPES = "IMAGE_UPLOAD" | "IMAGE_REMOVE" | "CREATE" | "LIST" | "DELETE" | "UPDATE" | "TILES";
+type ACTION_TYPES =
+	| "IMAGE_UPLOAD"
+	| "IMAGE_REMOVE"
+	| "CREATE"
+	| "LIST"
+	| "DELETE"
+	| "UPDATE"
+	| "TILES"
+	| "PARTIAL_UPDATE";
 
 interface BaseAPIProps {
 	config?: any;

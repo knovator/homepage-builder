@@ -1,12 +1,12 @@
 import React from "react";
 
-interface ToggleButtonProps {
+interface ToggleProps {
 	isChecked?: boolean;
 	disabled?: boolean;
 	onChange?: (status: boolean) => void;
 }
 
-const ToggleButton = ({ isChecked, disabled, onChange }: ToggleButtonProps) => {
+const Toggle = ({ isChecked, disabled, onChange }: ToggleProps) => {
 	return (
 		<label className="khb_switch" data-testid="khb_switch">
 			<input
@@ -20,4 +20,4 @@ const ToggleButton = ({ isChecked, disabled, onChange }: ToggleButtonProps) => {
 	);
 };
 
-export default ToggleButton;
+export default Toggle;
