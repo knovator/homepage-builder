@@ -56,6 +56,17 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			},
 		},
 		{
+			label: `${t("widget.selectionTitle")}`,
+			accessor: "selectionTitle",
+			required: true,
+			type: "text",
+			onInput: handleCapitalize,
+			placeholder: t("widget.selectionTitlePlaceholder"),
+			validations: {
+				required: t("widget.selectionTitleRequired"),
+			},
+		},
+		{
 			label: `${t("widget.code")}`,
 			accessor: "code",
 			required: true,
@@ -68,16 +79,16 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			},
 		},
 		{
-			label: `${t("widget.type")}`,
+			label: `${t("widget.selectionType")}`,
 			required: true,
-			accessor: "cardType",
+			accessor: "selectionType",
 			type: "select",
 			validations: {
-				required: t("widget.typeRequired"),
+				required: t("widget.selectionTypeRequired"),
 			},
 			options: [
-				{ label: "Fixed", value: "Fixed" },
-				{ label: "Slider", value: "Slider" },
+				{ label: "Fixed Card", value: "Fixed Card" },
+				{ label: "Carousel", value: "Carousel" },
 			],
 		},
 		{
