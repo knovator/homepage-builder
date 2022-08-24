@@ -11,19 +11,21 @@ interface ProviderContextType {
 	token: string | (() => Promise<string>);
 	onError: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	onSuccess: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
+	onLogout: () => void;
 	widgetRoutesPrefix: string;
 	tilesRoutesPrefix: string;
 	pageRoutesPrefix: string;
 }
 interface ProviderContextProviderProps
 	extends React.PropsWithChildren,
-		Omit<ProviderContextType, "onError" | "onSuccess" | "widgetRoutesPrefix" | "tilesRoutesPrefix"> {
+		Omit<ProviderContextType, "onError" | "onSuccess" | "onLogout" | "widgetRoutesPrefix" | "tilesRoutesPrefix"> {
 	onError?: (callback_code: import("../src/constants/common").CALLBACK_CODES, code: string, message: string) => void;
 	onSuccess?: (
 		callback_code: import("../src/constants/common").CALLBACK_CODES,
 		code: string,
 		message: string,
 	) => void;
+	onLogout?: () => void;
 	widgetRoutesPrefix?: string;
 	tilesRoutesPrefix?: string;
 	pageRoutesPrefix?: string;
