@@ -149,7 +149,9 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 						if (isUpdating && typeof schemaItem.editable !== "undefined" && !schemaItem.editable)
 							return values;
 
-						values[schemaItem.accessor] = data[schemaItem.accessor];
+						if (schemaItem.type === "number")
+							values[schemaItem.accessor] = parseInt(data[schemaItem.accessor]);
+						else values[schemaItem.accessor] = data[schemaItem.accessor];
 						return values;
 					},
 					{},
