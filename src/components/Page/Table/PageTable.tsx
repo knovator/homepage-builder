@@ -3,7 +3,7 @@ import { usePageState } from "../../../context/PageContext";
 import Table from "../../common/Table";
 
 const PageTable = () => {
-	const { list, onChangeFormState, loading, loader } = usePageState();
+	const { list, onChangeFormState, t, loading, loader } = usePageState();
 	const onUpdateClick = (item: any) => onChangeFormState("UPDATE", item);
 	const onDeleteClick = (item: any) => onChangeFormState("DELETE", item);
 
@@ -13,8 +13,8 @@ const PageTable = () => {
 			loader={loader}
 			loading={loading}
 			dataKeys={[
-				{ label: "Name", dataKey: "name", highlight: true },
-				{ label: "Code", dataKey: "code" },
+				{ label: t("page.tableName"), dataKey: "name", highlight: true },
+				{ label: t("page.tableCode"), dataKey: "code" },
 			]}
 			actions={{
 				edit: onUpdateClick,

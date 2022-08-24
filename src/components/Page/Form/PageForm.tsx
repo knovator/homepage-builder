@@ -60,7 +60,7 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 			},
 		},
 		{
-			label: `Widgets`,
+			label: t("page.widgets"),
 			accessor: "widgets",
 			type: "ReactSelect",
 			options: widgets,

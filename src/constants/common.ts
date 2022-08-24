@@ -44,6 +44,8 @@ const TRANSLATION_PAIRS_COMMON = {
 	cancelButtonText: "Cancel",
 	deleteButtonText: "Delete",
 	saveButtonText: "Save",
+	showing: "Showing",
+	of: "of",
 };
 
 const TRANSLATION_PAIRS_WIDGET = {
@@ -68,6 +70,9 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.mobileItems": "Mobile Items",
 	"widget.searchPlaceholder": "Search Widgets...",
 	"widget.autoPlay": "Auto Play",
+	"widget.tableName": "Name",
+	"widget.tableCode": "Code",
+	"widget.tableActive": "Active",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",
@@ -91,6 +96,9 @@ const TRANSLATION_PAIRS_PAGE = {
 	"page.addPageTitle": "Add Page",
 	"page.updatePageTitle": "Update Page",
 	"page.searchPages": "Search Pages...",
+	"page.tableName": "Name",
+	"page.tableCode": "Code",
+	"page.widgets": "Widgets",
 };
 export {
 	CALLBACK_CODES,

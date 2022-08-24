@@ -3,9 +3,12 @@ import { useWidgetState } from "../../../context/WidgetContext";
 import Pagination from "../../common/Pagination";
 
 const WidgetPagination = () => {
-	const { totalPages, totalRecords, currentPage, pageSize, setCurrentPage } = useWidgetState();
+	const { t, totalPages, totalRecords, currentPage, pageSize, setCurrentPage } = useWidgetState();
 	return (
 		<Pagination
+			ofText={t("of")}
+			pageText={t("page")}
+			showingText={t("showing")}
 			totalPages={totalPages}
 			totalRecords={totalRecords}
 			currentPage={currentPage}

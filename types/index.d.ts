@@ -217,6 +217,9 @@ interface PaginationProps {
 	currentPage: number;
 	pageSize: number;
 	setCurrentPage: (value: number) => void;
+	showingText?: string;
+	pageText?: string;
+	ofText?: string;
 }
 interface TileItemsAccordianProps {
 	id: string;
@@ -230,6 +233,7 @@ interface TileItemsAccordianProps {
 	toggleShow: (status: boolean) => void;
 	onDataSubmit: (state: FormActionTypes, data: any, updateId?: string) => void;
 	onDelete: (id: string) => void;
+	addText?: string;
 	editText?: string;
 	cancelText?: string;
 	deleteText?: string;

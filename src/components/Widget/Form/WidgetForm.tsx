@@ -221,6 +221,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Web"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
+					addText={t("addButtonText")}
 					cancelText={t("cancelButtonText")}
 					saveText={t("saveButtonText")}
 					editText={t("editButtonText")}
@@ -240,6 +241,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					tileType="Mobile"
 					widgetId={data?._id}
 					onDelete={onDeleteTile}
+					addText={t("addButtonText")}
 					cancelText={t("cancelButtonText")}
 					saveText={t("saveButtonText")}
 					editText={t("editButtonText")}
