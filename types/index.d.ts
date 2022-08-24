@@ -195,6 +195,7 @@ interface SchemaType {
 	placeholder?: string;
 	required?: boolean;
 	onChange?: (e: any) => void;
+	show?: boolean;
 }
 interface WidgetProps {
 	t?: any;

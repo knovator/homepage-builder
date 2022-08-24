@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Drawer from "../../common/Drawer";
 import Button from "../../common/Button";
@@ -10,7 +10,7 @@ import { useWidgetState } from "../../../context/WidgetContext";
 import { useProviderState } from "../../../context/ProviderContext";
 import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
 
-const MasterForm = ({ onClose, open, formState }: FormProps) => {
+const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	const { baseUrl } = useProviderState();
 	const {
 		t,
@@ -26,6 +26,15 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 	const [webShow, setWebShow] = useState(false);
 	const [mobileShow, setMobileShow] = useState(false);
 	const widgetFormRef = useRef<HTMLFormElement | null>(null);
+	const [showAutoPlay, setShowAutoPlay] = useState(false);
+
+	useEffect(() => {
+		if (data?.selectionType === "Carousel") {
+			setShowAutoPlay(true);
+		} else {
+			setShowAutoPlay(false);
+		}
+	}, [data]);
 
 	// Form Utility Functions
 	function handleCapitalize(event: React.ChangeEvent<HTMLInputElement>) {
@@ -114,6 +123,7 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			accessor: "autoPlay",
 			type: "checkbox",
 			defaultValue: true,
+			show: showAutoPlay,
 		},
 	];
 	const tileFormSchema: SchemaType[] = [
@@ -190,6 +200,12 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 					ref={widgetFormRef}
 					data={data}
 					isUpdating={formState === "UPDATE"}
+					watcher={(value, name, type) => {
+						if (name === "selectionType") {
+							if (value["selectionType"] === "Carousel") setShowAutoPlay(true);
+							else setShowAutoPlay(false);
+						}
+					}}
 				/>
 
 				{/* Web Items */}
@@ -232,6 +248,6 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			</div>
 		</Drawer>
 	);
-};;;
+};
 
-export default MasterForm;
+export default WidgetForm;
