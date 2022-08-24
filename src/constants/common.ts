@@ -66,6 +66,7 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.webItems": "Web Items",
 	"widget.mobileItems": "Mobile Items",
 	"widget.searchPlaceholder": "Search Widgets...",
+	"widget.autoPlay": "Auto Play",
 };
 const TRANSLATION_PAIRS_TILES = {
 	"tile.title": "Title",

@@ -78,6 +78,17 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 							/>
 						);
 						break;
+					case "checkbox":
+						input = (
+							<Input.Checkbox
+								error={errors[schema.accessor]?.message?.toString()}
+								label={schema.label}
+								rest={register(schema.accessor, schema.validations || {})}
+								className="block"
+								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
+							/>
+						);
+						break;
 					case "select":
 						input = (
 							<Input.Select

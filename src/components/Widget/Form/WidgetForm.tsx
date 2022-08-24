@@ -109,6 +109,12 @@ const MasterForm = ({ onClose, open, formState }: FormProps) => {
 			type: "number",
 			placeholder: t("widget.tabletPerRowPlaceholder"),
 		},
+		{
+			label: t("widget.autoPlay"),
+			accessor: "autoPlay",
+			type: "checkbox",
+			defaultValue: true,
+		},
 	];
 	const tileFormSchema: SchemaType[] = [
 		{

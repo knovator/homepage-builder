@@ -138,6 +138,13 @@ interface InputProps {
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
+interface CheckboxProps {
+	rest?: any;
+	label?: string;
+	error?: string;
+	className?: string;
+	disabled?: boolean;
+}
 interface SelectProps {
 	value?: string | number;
 	onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -233,10 +240,12 @@ interface ImageUploadProps {
 	error?: string;
 }
 // Table
+type CellInputType = ({ row, onUpdate }: { row: any; onUpdate: (row: any) => void }) => JSX.Element | null | string;
 type TableDataItemFormat = {
 	label: string;
 	dataKey: string;
 	highlight?: boolean;
+	Cell?: CellInputType;
 };
 interface TableProps {
 	data: any[];
