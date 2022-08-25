@@ -21,6 +21,8 @@ const WidgetContextProvider = ({
 	getWidgets = () => {},
 	onImageUpload = async (file: File) => {},
 	onImageRemove = async (id: string) => {},
+	widgetTypes = [],
+	selectionTypes = [],
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -63,6 +65,8 @@ const WidgetContextProvider = ({
 				onImageUpload,
 				onImageRemove,
 				onPartialUpdateWidget,
+				widgetTypes,
+				selectionTypes,
 				// Pagination
 				currentPage,
 				limits,

@@ -20,6 +20,8 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [itemData, setItemData] = useState<any | null>(null);
 	const [formState, setFormState] = useState<FormActionTypes>();
+	const [widgetTypes, setWidgetTypes] = useState<WidgetType[]>([]);
+	const [selectionTypes, setSelectionTypes] = useState<SelectionType[]>([]);
 
 	const { baseUrl, token, onError, onSuccess, onLogout, widgetRoutesPrefix, tilesRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
@@ -31,6 +33,7 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		}
 		onError(code, "error", data?.message);
 	};
+	// List operations
 	const getWidgets = useCallback(
 		async (search?: string) => {
 			try {
@@ -87,41 +90,29 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		},
 		[baseUrl, routes, token],
 	);
-	const onWidgetFormSubmit = async (data: any) => {
-		setLoading(true);
-		let code = formState === "ADD" ? CALLBACK_CODES.CREATE : CALLBACK_CODES.UPDATE;
+	const onDeleteTile = async (id: string) => {
 		try {
-			let api = getApiType({
-				routes,
-				action: formState === "ADD" ? "CREATE" : "UPDATE",
-				prefix: widgetRoutesPrefix,
-				id: itemData?._id,
-			});
+			setTilesLoading(true);
+			let api = getApiType({ routes, action: "DELETE", prefix: tilesRoutesPrefix, id });
 			let response = await request({
 				baseUrl,
 				token,
-				data,
-				url: api.url,
 				method: api.method,
-				onError: handleError(code),
+				url: api.url,
+				onError: handleError(CALLBACK_CODES.DELETE),
 			});
 			if (response?.code === "SUCCESS") {
-				setLoading(false);
-				onSuccess(code, response?.code, response?.message);
-				getWidgets();
-				onCloseForm();
-			} else {
-				setLoading(false);
-				onError(code, response?.code, response?.message);
+				setTilesLoading(false);
+				onSuccess(CALLBACK_CODES.DELETE, response?.code, response?.message);
+				getTiles(itemData?._id);
+				return;
 			}
+			setTilesLoading(false);
+			onError(CALLBACK_CODES.DELETE, response?.code, response?.message);
 		} catch (error) {
-			setLoading(false);
-			onError(code, INTERNAL_ERROR_CODE, (error as Error).message);
+			setTilesLoading(false);
+			onError(CALLBACK_CODES.DELETE, INTERNAL_ERROR_CODE, (error as Error).message);
 		}
-	};
-	const onCloseForm = () => {
-		setFormState(undefined);
-		setItemData(null);
 	};
 	const onCofirmDeleteWidget = async () => {
 		try {
@@ -166,30 +157,142 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 			onCloseForm();
 		}
 	};
-	const onDeleteTile = async (id: string) => {
+	const onPartialUpdateWidget = async (data: any, id: string) => {
 		try {
-			setTilesLoading(true);
-			let api = getApiType({ routes, action: "DELETE", prefix: tilesRoutesPrefix, id });
+			let api = getApiType({
+				routes,
+				action: "PARTIAL_UPDATE",
+				prefix: widgetRoutesPrefix,
+				id,
+			});
 			let response = await request({
 				baseUrl,
 				token,
-				method: api.method,
+				data,
 				url: api.url,
-				onError: handleError(CALLBACK_CODES.DELETE),
+				method: api.method,
+				onError: handleError(CALLBACK_CODES.PARTIAL_UPDATE),
+			});
+			if (response?.code === "SUCCESS") {
+				setList((oldListData) => oldListData.map((item) => (item._id === id ? response.data : item)));
+			} else {
+				onError(CALLBACK_CODES.PARTIAL_UPDATE, response?.code, response?.message);
+			}
+		} catch (error) {
+			onError(CALLBACK_CODES.PARTIAL_UPDATE, INTERNAL_ERROR_CODE, (error as Error).message);
+		}
+	};
+	const getWidgetsTypes = async () => {
+		if (widgetTypes?.length > 0) return;
+		setLoading(true);
+		let api = getApiType({ routes, action: "WIDGET_TYPES", prefix: widgetRoutesPrefix });
+		let response = await request({
+			baseUrl,
+			token,
+			method: api.method,
+			url: api.url,
+			onError: handleError(CALLBACK_CODES.GET_ALL),
+		});
+		if (response?.code === "SUCCESS") {
+			setLoading(false);
+			return setWidgetTypes(dataGatter(response));
+		}
+		setLoading(false);
+	};
+	const getSelectionTypes = async () => {
+		if (selectionTypes?.length > 0) return;
+		setLoading(true);
+		let api = getApiType({ routes, action: "SELECTION_TYPES", prefix: widgetRoutesPrefix });
+		let response = await request({
+			baseUrl,
+			token,
+			method: api.method,
+			url: api.url,
+			onError: handleError(CALLBACK_CODES.GET_ALL),
+		});
+		if (response?.code === "SUCCESS") {
+			setLoading(false);
+			return setSelectionTypes(dataGatter(response));
+		}
+		setLoading(false);
+	};
+	// Form operations
+	const onWidgetFormSubmit = async (data: any) => {
+		setLoading(true);
+		let code = formState === "ADD" ? CALLBACK_CODES.CREATE : CALLBACK_CODES.UPDATE;
+		let api = getApiType({
+			routes,
+			action: formState === "ADD" ? "CREATE" : "UPDATE",
+			prefix: widgetRoutesPrefix,
+			id: itemData?._id,
+		});
+		let response = await request({
+			baseUrl,
+			token,
+			data,
+			url: api.url,
+			method: api.method,
+			onError: handleError(code),
+		});
+		if (response?.code === "SUCCESS") {
+			setLoading(false);
+			onSuccess(code, response?.code, response?.message);
+			getWidgets();
+			onCloseForm();
+		}
+	};
+	const onCloseForm = () => {
+		setFormState(undefined);
+		setItemData(null);
+	};
+	const onChangeFormState = (state: FormActionTypes, data?: any) => {
+		setItemData(data || null);
+		setFormState(state);
+		// fetch WidgetTypes & SelectionTypes if needed
+		if (state === "ADD" || state === "UPDATE") {
+			getWidgetsTypes();
+			getSelectionTypes();
+		}
+		// get Tile data if widget is updating
+		if (state === "UPDATE" && data) {
+			getTiles(data._id);
+		} else if (state === "ADD") {
+			// reset Tile data if widget is adding
+			setTilesList({ web: [], mobile: [] });
+		}
+	};
+	const onTileFormSubmit = async (state: FormActionTypes, data: any, updateId?: string) => {
+		setTilesLoading(true);
+		let code = state === "ADD" ? CALLBACK_CODES.CREATE : CALLBACK_CODES.UPDATE;
+		try {
+			let api = getApiType({
+				routes,
+				action: state === "ADD" ? "CREATE" : "UPDATE",
+				prefix: tilesRoutesPrefix,
+				id: updateId,
+			});
+			let response = await request({
+				baseUrl,
+				token,
+				data,
+				url: api.url,
+				method: api.method,
+				onError: handleError(code),
 			});
 			if (response?.code === "SUCCESS") {
 				setTilesLoading(false);
-				onSuccess(CALLBACK_CODES.DELETE, response?.code, response?.message);
-				getTiles(itemData?._id);
-				return;
+				onSuccess(code, response?.code, response?.message);
+				getTiles(itemData._id);
+			} else {
+				setTilesLoading(false);
+				onError(code, response?.code, response?.message);
 			}
-			setTilesLoading(false);
-			onError(CALLBACK_CODES.DELETE, response?.code, response?.message);
 		} catch (error) {
 			setTilesLoading(false);
-			onError(CALLBACK_CODES.DELETE, INTERNAL_ERROR_CODE, (error as Error).message);
+			onError(code, INTERNAL_ERROR_CODE, (error as Error).message);
 		}
 	};
+	// Image Upload operations
 	const onImageUpload = async (file: File): Promise<{ fileUrl: string; fileId: string; fileUri: string } | void> => {
 		try {
 			const payload = new FormData();
@@ -238,71 +341,6 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 			onError(CALLBACK_CODES.IMAGE_REMOVE, INTERNAL_ERROR_CODE, (error as Error).message);
 		}
 	};
-	const onChangeFormState = (state: FormActionTypes, data?: any) => {
-		setItemData(data || null);
-		setFormState(state);
-		if (state === "UPDATE" && data) {
-			getTiles(data._id);
-		} else if (state === "ADD") {
-			setTilesList({ web: [], mobile: [] });
-		}
-	};
-	const onTileFormSubmit = async (state: FormActionTypes, data: any, updateId?: string) => {
-		setTilesLoading(true);
-		let code = state === "ADD" ? CALLBACK_CODES.CREATE : CALLBACK_CODES.UPDATE;
-		try {
-			let api = getApiType({
-				routes,
-				action: state === "ADD" ? "CREATE" : "UPDATE",
-				prefix: tilesRoutesPrefix,
-				id: updateId,
-			});
-			let response = await request({
-				baseUrl,
-				token,
-				data,
-				url: api.url,
-				method: api.method,
-				onError: handleError(code),
-			});
-			if (response?.code === "SUCCESS") {
-				setTilesLoading(false);
-				onSuccess(code, response?.code, response?.message);
-				getTiles(itemData._id);
-			} else {
-				setTilesLoading(false);
-				onError(code, response?.code, response?.message);
-			}
-		} catch (error) {
-			setTilesLoading(false);
-			onError(code, INTERNAL_ERROR_CODE, (error as Error).message);
-		}
-	};
-	const onPartialUpdateWidget = async (data: any, id: string) => {
-		try {
-			let api = getApiType({
-				routes,
-				action: "PARTIAL_UPDATE",
-				prefix: widgetRoutesPrefix,
-				id,
-			});
-			let response = await request({
-				baseUrl,
-				token,
-				data,
-				url: api.url,
-				method: api.method,
-				onError: handleError(CALLBACK_CODES.PARTIAL_UPDATE),
-			});
-			if (response?.code === "SUCCESS") {
-				setList((oldListData) => oldListData.map((item) => (item._id === id ? response.data : item)));
-			} else {
-				onError(CALLBACK_CODES.PARTIAL_UPDATE, response?.code, response?.message);
-			}
-		} catch (error) {
-			onError(CALLBACK_CODES.PARTIAL_UPDATE, INTERNAL_ERROR_CODE, (error as Error).message);
-		}
-	};
 
 	useEffect(() => {
 		getWidgets();
@@ -334,12 +372,14 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		onPartialUpdateWidget,
 		onImageUpload,
 		onImageRemove,
+		widgetTypes,
+		selectionTypes,
 
 		// Tiles
 		tilesList,
 		tilesLoading,
 		onTileFormSubmit,
 	};
-};
+};;;
 
 export default useWidget;

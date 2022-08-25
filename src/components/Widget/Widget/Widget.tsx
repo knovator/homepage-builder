@@ -36,6 +36,8 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 		onImageRemove,
 		onImageUpload,
 		onPartialUpdateWidget,
+		widgetTypes,
+		selectionTypes,
 		// Pagination
 		totalPages,
 		totalRecords,
@@ -63,6 +65,8 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 			onImageRemove={onImageRemove}
 			onImageUpload={onImageUpload}
 			onPartialUpdateWidget={onPartialUpdateWidget}
+			widgetTypes={widgetTypes}
+			selectionTypes={selectionTypes}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}

@@ -47,6 +47,8 @@ interface WidgetContextType {
 	getWidgets: (searchText: string) => void;
 	onImageUpload: (file: File) => Promise<{ fileUrl: string; fileId: string; fileUri: string } | void>;
 	onImageRemove: (id: string) => Promise<void>;
+	widgetTypes: WidgetType[];
+	selectionTypes: SelectionType[];
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -276,6 +278,8 @@ interface TableProps {
 // \ End Components
 
 // API
+type WidgetType = { value: string; label: string };
+type SelectionType = { value: string; label: string };
 type ACTION_TYPES =
 	| "IMAGE_UPLOAD"
 	| "IMAGE_REMOVE"
@@ -284,7 +288,9 @@ type ACTION_TYPES =
 	| "DELETE"
 	| "UPDATE"
 	| "TILES"
-	| "PARTIAL_UPDATE";
+	| "PARTIAL_UPDATE"
+	| "WIDGET_TYPES"
+	| "SELECTION_TYPES";
 
 interface BaseAPIProps {
 	config?: any;

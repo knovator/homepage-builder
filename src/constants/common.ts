@@ -54,6 +54,8 @@ const TRANSLATION_PAIRS_WIDGET = {
 	"widget.selectionTitle": "Selection Title",
 	"widget.selectionTitlePlaceholder": "Enter Selection Title",
 	"widget.selectionTitleRequired": "Selection Title is required",
+	"widget.widgetType": "Widget Type",
+	"widget.widgetTypePlaceholder": "Select Widget Type",
 	"widget.selectionType": "Selection Type",
 	"widget.selectionTypeRequired": "Selection Type is required",
 	"widget.code": "Code",

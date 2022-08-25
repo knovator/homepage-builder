@@ -19,7 +19,8 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		canAdd,
 		canUpdate,
 		tilesList,
-		tilesLoading,
+		widgetTypes,
+		selectionTypes,
 		onTileFormSubmit,
 		onDeleteTile,
 		onImageRemove,
@@ -29,14 +30,22 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	const [mobileShow, setMobileShow] = useState(false);
 	const widgetFormRef = useRef<HTMLFormElement | null>(null);
 	const [showAutoPlay, setShowAutoPlay] = useState(false);
+	const [showTiles, setShowTiles] = useState(true);
 
 	useEffect(() => {
-		if (data?.selectionType === "Carousel") {
-			setShowAutoPlay(true);
-		} else {
-			setShowAutoPlay(false);
+		if (data && formState === "UPDATE") {
+			if (data?.selectionType === "Carousel") {
+				setShowAutoPlay(true);
+			} else {
+				setShowAutoPlay(false);
+			}
+			if (data?.widgetType === "Image") {
+				setShowTiles(true);
+			} else {
+				setShowTiles(false);
+			}
 		}
-	}, [data]);
+	}, [data, formState]);
 
 	// Form Utility Functions
 	function handleCapitalize(event: React.ChangeEvent<HTMLInputElement>) {
@@ -51,6 +60,15 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	// Widget Form Functions
 	const onWidgetFormSubmitClick = () => {
 		widgetFormRef.current?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+	};
+	const onWidgetFormInputChange = (value: any, name: string | undefined) => {
+		if (name === "selectionType") {
+			if (value["selectionType"] === "Carousel") setShowAutoPlay(true);
+			else setShowAutoPlay(false);
+		} else if (name === "widgetType") {
+			if (value["widgetType"] === "Image") setShowTiles(true);
+			else setShowTiles(false);
+		}
 	};
 
 	// Schemas
@@ -90,6 +108,17 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			},
 		},
 		{
+			label: `${t("widget.widgetType")}`,
+			required: true,
+			editable: false,
+			accessor: "widgetType",
+			type: "select",
+			validations: {
+				required: t("widget.widgetTypePlaceholder"),
+			},
+			options: widgetTypes,
+		},
+		{
 			label: `${t("widget.selectionType")}`,
 			required: true,
 			accessor: "selectionType",
@@ -97,10 +126,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			validations: {
 				required: t("widget.selectionTypeRequired"),
 			},
-			options: [
-				{ label: "Fixed Card", value: "Fixed Card" },
-				{ label: "Carousel", value: "Carousel" },
-			],
+			options: selectionTypes,
 		},
 		{
 			label: t("widget.webPerRow"),
@@ -124,7 +150,6 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			label: t("widget.autoPlay"),
 			accessor: "autoPlay",
 			type: "checkbox",
-			defaultValue: true,
 			show: showAutoPlay,
 		},
 	];
@@ -210,53 +235,52 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					ref={widgetFormRef}
 					data={data}
 					isUpdating={formState === "UPDATE"}
-					watcher={(value, name, type) => {
-						if (name === "selectionType") {
-							if (value["selectionType"] === "Carousel") setShowAutoPlay(true);
-							else setShowAutoPlay(false);
-						}
-					}}
+					watcher={onWidgetFormInputChange}
 				/>
 
-				{/* Web Items */}
-				<TileItemsAccordian
-					collapseId="webItems"
-					title={t("widget.webItems")}
-					id="web"
-					schema={tileFormSchema}
-					show={webShow}
-					tilesData={tilesList.web}
-					toggleShow={setWebShow}
-					onDataSubmit={onTileFormSubmit}
-					tileType="Web"
-					widgetId={data?._id}
-					onDelete={onDeleteTile}
-					addText={t("addButtonText")}
-					cancelText={t("cancelButtonText")}
-					saveText={t("saveButtonText")}
-					editText={t("editButtonText")}
-					deleteText={t("deleteButtonText")}
-				/>
+				{showTiles && (
+					<>
+						{/* Web Items */}
+						<TileItemsAccordian
+							collapseId="webItems"
+							title={t("widget.webItems")}
+							id="web"
+							schema={tileFormSchema}
+							show={webShow}
+							tilesData={tilesList.web}
+							toggleShow={setWebShow}
+							onDataSubmit={onTileFormSubmit}
+							tileType="Web"
+							widgetId={data?._id}
+							onDelete={onDeleteTile}
+							addText={t("addButtonText")}
+							cancelText={t("cancelButtonText")}
+							saveText={t("saveButtonText")}
+							editText={t("editButtonText")}
+							deleteText={t("deleteButtonText")}
+						/>
 
-				{/* Mobile Items */}
-				<TileItemsAccordian
-					collapseId="mobileItems"
-					title={t("widget.mobileItems")}
-					id="mobile"
-					schema={tileFormSchema}
-					show={mobileShow}
-					tilesData={tilesList.mobile}
-					toggleShow={setMobileShow}
-					onDataSubmit={onTileFormSubmit}
-					tileType="Mobile"
-					widgetId={data?._id}
-					onDelete={onDeleteTile}
-					addText={t("addButtonText")}
-					cancelText={t("cancelButtonText")}
-					saveText={t("saveButtonText")}
-					editText={t("editButtonText")}
-					deleteText={t("deleteButtonText")}
-				/>
+						{/* Mobile Items */}
+						<TileItemsAccordian
+							collapseId="mobileItems"
+							title={t("widget.mobileItems")}
+							id="mobile"
+							schema={tileFormSchema}
+							show={mobileShow}
+							tilesData={tilesList.mobile}
+							toggleShow={setMobileShow}
+							onDataSubmit={onTileFormSubmit}
+							tileType="Mobile"
+							widgetId={data?._id}
+							onDelete={onDeleteTile}
+							addText={t("addButtonText")}
+							cancelText={t("cancelButtonText")}
+							saveText={t("saveButtonText")}
+							editText={t("editButtonText")}
+							deleteText={t("deleteButtonText")}
+						/>
+					</>
+				)}
 			</div>
 		</Drawer>
 	);
