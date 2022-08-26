@@ -21,6 +21,13 @@ const WidgetContextProvider = ({
 	getWidgets = () => {},
 	onImageUpload = async (file: File) => {},
 	onImageRemove = async (id: string) => {},
+	widgetTypes = [],
+	selectionTypes = [],
+	getCollectionData = () => Promise.resolve(),
+	collectionDataLoading = false,
+	collectionData = [],
+	formatListItem,
+	formatOptionLabel,
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -40,7 +47,7 @@ const WidgetContextProvider = ({
 	// Tile
 	tilesList = { web: [], mobile: [] },
 	tilesLoading = false,
-	onTileFormSubmit = (state: FormActionTypes, data: any) => {},
+	onTileFormSubmit = () => {},
 	// other
 	children,
 }: WidgetContextProviderProps) => {
@@ -63,6 +70,13 @@ const WidgetContextProvider = ({
 				onImageUpload,
 				onImageRemove,
 				onPartialUpdateWidget,
+				widgetTypes,
+				selectionTypes,
+				getCollectionData,
+				collectionDataLoading,
+				collectionData,
+				formatListItem,
+				formatOptionLabel,
 				// Pagination
 				currentPage,
 				limits,

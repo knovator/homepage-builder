@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DropResult } from "react-beautiful-dnd";
 
 import Drawer from "../../common/Drawer";
 import Button from "../../common/Button";
 import Form from "../../common/Form";
-import SelectedWidgets from "./SelectedWidgets";
 
 import { usePageState } from "../../../context/PageContext";
 import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
+import DNDItemsList from "../../common/DNDItemsList";
 
 const PageForm = ({ onClose, open, formState }: FormProps) => {
 	const {
@@ -107,24 +107,8 @@ const PageForm = ({ onClose, open, formState }: FormProps) => {
 						widgets: selectedWidgets.map((widget) => widget.value),
 					}}
 				/>
-				<DragDropContext onDragEnd={onDragEnd}>
-					<Droppable droppableId="droppable">
-						{(droppableProvided) => (
-							<>
-								<div
-									className="space-y-2"
-									ref={droppableProvided.innerRef}
-									{...droppableProvided.droppableProps}
-								>
-									<SelectedWidgets
-										widgets={selectedWidgets}
-										placeholder={droppableProvided.placeholder}
-									/>
-								</div>
-							</>
-						)}
-					</Droppable>
-				</DragDropContext>
+
+				<DNDItemsList onDragEnd={onDragEnd} items={selectedWidgets} />
 			</div>
 		</Drawer>
 	);

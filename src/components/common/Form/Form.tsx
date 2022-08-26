@@ -27,17 +27,24 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			control,
 			setError,
 			watch,
-		} = useForm({
-			defaultValues: data || {},
-		});
+		} = useForm();
 
-		React.useEffect(() => {
+		// setting update data in form
+		useEffect(() => {
+			if (!isEmpty(data)) {
+				reset(data);
+			}
+		}, [data, reset]);
+
+		// setting subscriber if watcher is provided
+		useEffect(() => {
 			if (watcher) {
 				const subscription = watch((value, { name, type }) => watcher(value, name, type));
 				return () => subscription.unsubscribe();
 			}
-		}, [watch]);
+		}, [watch, watcher]);
 
+		// setting values if updates are provided
 		useEffect(() => {
 			if (updates) {
 				Object.keys(updates).forEach((key) => {
@@ -85,6 +92,12 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								selectedOptions={schema.selectedOptions}
 								required={schema.required}
 								isMulti={schema.isMulti}
+								isSearchable={schema.isSearchable}
+								onSearch={schema.onSearch}
+								isLoading={schema.isLoading}
+								placeholder={schema.placeholder}
+								wrapperClassName={schema.wrapperClassName}
+								formatOptionLabel={schema.formatOptionLabel}
 							/>
 						);
 						break;
@@ -96,6 +109,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								rest={register(schema.accessor, schema.validations || {})}
 								className="block"
 								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -112,6 +126,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 									!enable
 								}
 								required={schema.required}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -133,6 +148,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								}
 								required={schema.required}
 								onInput={schema.onInput}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -168,14 +184,15 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 			e.preventDefault();
 			handleSubmit((data) => {
 				let formattedData = schema.reduce(
-					(values: Record<string, string | number | boolean>, schemaItem: SchemaType) => {
+					(values: Record<string, string | number | boolean | null>, schemaItem: SchemaType) => {
 						// Do not add field if editing is disabled for it
 						if (isUpdating && typeof schemaItem.editable !== "undefined" && !schemaItem.editable)
 							return values;
 
-						if (schemaItem.type === "number")
-							values[schemaItem.accessor] = parseInt(data[schemaItem.accessor]);
-						else values[schemaItem.accessor] = data[schemaItem.accessor];
+						if (schemaItem.type === "number") {
+							values[schemaItem.accessor] =
+								data[schemaItem.accessor] === "" ? null : parseInt(data[schemaItem.accessor]);
+						} else values[schemaItem.accessor] = data[schemaItem.accessor];
 						return values;
 					},
 					{},

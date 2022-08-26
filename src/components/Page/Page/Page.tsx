@@ -2,7 +2,7 @@ import React from "react";
 import usePage from "../../../hooks/usePage";
 import { createTranslation } from "../../../helper/utils";
 import PageContextProvider from "../../../context/PageContext";
-import { TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_PAGE } from "../../../constants/common";
+import { DEFAULT_PERMISSIONS, TRANSLATION_PAIRS_COMMON, TRANSLATION_PAIRS_PAGE } from "../../../constants/common";
 
 import Table from "../Table";
 import Search from "../Search";
@@ -11,7 +11,7 @@ import AddButton from "../AddButton";
 import Pagination from "../Pagination";
 import DeleteModal from "../../common/DeleteModal";
 
-const Page = ({ t, loader, permissions }: PageProps) => {
+const Page = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: PageProps) => {
 	const derivedT = createTranslation(t, {
 		...TRANSLATION_PAIRS_COMMON,
 		...TRANSLATION_PAIRS_PAGE,

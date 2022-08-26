@@ -19,10 +19,21 @@ const apiList = {
 		url: `${prefix}/${id}`,
 		method: "DELETE",
 	}),
-
+	WIDGET_TYPES: ({ prefix }: API_INPUT_TYPE) => ({
+		url: `${prefix}/widget-types`,
+		method: "GET",
+	}),
+	SELECTION_TYPES: ({ prefix }: API_INPUT_TYPE) => ({
+		url: `${prefix}/selection-types`,
+		method: "GET",
+	}),
 	TILES: ({ prefix, id }: API_INPUT_TYPE) => ({
 		url: `${prefix}/${id}`,
 		method: "GET",
+	}),
+	COLLECTION_DATA: ({ prefix }: API_INPUT_TYPE) => ({
+		url: `${prefix}/collection-data`,
+		method: "POST",
 	}),
 
 	// Image Upload API

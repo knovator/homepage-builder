@@ -47,6 +47,13 @@ interface WidgetContextType {
 	getWidgets: (searchText: string) => void;
 	onImageUpload: (file: File) => Promise<{ fileUrl: string; fileId: string; fileUri: string } | void>;
 	onImageRemove: (id: string) => Promise<void>;
+	widgetTypes: WidgetType[];
+	selectionTypes: SelectionType[];
+	getCollectionData: (collectionName: string, search?: string) => Promise<void>;
+	collectionDataLoading: boolean;
+	collectionData: any[];
+	formatListItem?: (code: string, data: any) => JSX.Element;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -103,6 +110,12 @@ interface PageContextType {
 // \ End context
 
 // Components
+interface DNDItemsListProps {
+	onDragEnd: (result: DropResult) => void;
+	items: OptionType[];
+	listCode?: string;
+	formatItem?: (code: string, data: any) => JSX.Element;
+}
 interface DrawerProps {
 	children?: React.ReactNode;
 	open: boolean;
@@ -137,6 +150,7 @@ interface InputProps {
 	required?: boolean;
 	disabled?: boolean;
 	rest?: any;
+	wrapperClassName?: string;
 	onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	value?: string | number;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -148,6 +162,7 @@ interface CheckboxProps {
 	error?: string;
 	className?: string;
 	disabled?: boolean;
+	wrapperClassName?: string;
 }
 interface SelectProps {
 	value?: string | number;
@@ -161,6 +176,7 @@ interface SelectProps {
 	id?: string;
 	rest?: any;
 	required?: boolean;
+	wrapperClassName?: string;
 }
 interface ReactSelectProps {
 	onChange?: (opt: { value: string; label: string }[]) => void;
@@ -173,6 +189,13 @@ interface ReactSelectProps {
 	isMulti?: boolean;
 	required?: boolean;
 	selectedOptions?: { value: string; label: string }[];
+	isLoading?: boolean;
+	isSearchable?: boolean;
+	onSearch?: (text: string) => void;
+	placeholder?: string;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
+	listCode?: string;
+	wrapperClassName?: string;
 }
 interface FormProps {
 	open: boolean;
@@ -185,7 +208,7 @@ interface InputRendererProps {
 	setError: (msg: string) => void;
 	disabled?: boolean;
 }
-interface SchemaType {
+interface SchemaType extends ReactSelectProps {
 	label?: string;
 	accessor: string;
 	Input?: (props: InputRendererProps) => JSX.Element;
@@ -201,11 +224,14 @@ interface SchemaType {
 	required?: boolean;
 	onChange?: (e: any) => void;
 	show?: boolean;
+	wrapperClassName?: string;
 }
 interface WidgetProps {
 	t?: any;
 	loader?: any;
 	permissions?: PermissionsObj;
+	formatListItem?: (code: string, data: any) => JSX.Element;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
 }
 interface PageProps {
 	t?: any;
@@ -276,6 +302,8 @@ interface TableProps {
 // \ End Components
 
 // API
+type WidgetType = { value: string; label: string };
+type SelectionType = { value: string; label: string };
 type ACTION_TYPES =
 	| "IMAGE_UPLOAD"
 	| "IMAGE_REMOVE"
@@ -284,7 +312,10 @@ type ACTION_TYPES =
 	| "DELETE"
 	| "UPDATE"
 	| "TILES"
-	| "PARTIAL_UPDATE";
+	| "PARTIAL_UPDATE"
+	| "WIDGET_TYPES"
+	| "SELECTION_TYPES"
+	| "COLLECTION_DATA";
 
 interface BaseAPIProps {
 	config?: any;
