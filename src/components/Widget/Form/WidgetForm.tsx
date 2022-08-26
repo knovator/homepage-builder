@@ -339,11 +339,13 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					isUpdating={formState === "UPDATE"}
 					watcher={onWidgetFormInputChange}
 				/>
-				<DNDItemsList
-					items={selectedCollectionItems}
-					onDragEnd={onCollectionIndexChange}
-					formatItem={formatListItem}
-				/>
+				{!tilesEnabled && (
+					<DNDItemsList
+						items={selectedCollectionItems}
+						onDragEnd={onCollectionIndexChange}
+						formatItem={formatListItem}
+					/>
+				)}
 
 				{tilesEnabled && (
 					<>
