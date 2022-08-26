@@ -28,6 +28,15 @@ const Pagination = ({
 			setLocalCurrentPage(newValue);
 		}
 	};
+	const onPaginationButtonClick = (dir: "next" | "previous") => {
+		if (dir === "next") {
+			setCurrentPage(currentPage + 1);
+			setLocalCurrentPage(localCurrentPage + 1);
+		} else {
+			setCurrentPage(currentPage - 1);
+			setLocalCurrentPage(localCurrentPage - 1);
+		}
+	};
 	return (
 		<nav className="khb_pagination" aria-label="Table navigation">
 			<span className="khb_pagination-total">
@@ -36,7 +45,12 @@ const Pagination = ({
 				{ofText} {totalRecords}
 			</span>
 			<ul className="khb_pagination-actions">
-				<Button size="xs" type="secondary" disabled={currentPage - 1 === 0}>
+				<Button
+					size="xs"
+					type="secondary"
+					disabled={currentPage - 1 === 0}
+					onClick={() => onPaginationButtonClick("previous")}
+				>
 					<ChevronLeft srText="Previous" />
 				</Button>
 				<div className="khb_pagination-pager">
@@ -52,7 +66,12 @@ const Pagination = ({
 					/>{" "}
 					/ {totalPages}
 				</div>
-				<Button size="xs" type="secondary" disabled={currentPage === totalPages}>
+				<Button
+					size="xs"
+					type="secondary"
+					disabled={currentPage === totalPages}
+					onClick={() => onPaginationButtonClick("next")}
+				>
 					<ChevronRight srText="Next" />
 				</Button>
 			</ul>
