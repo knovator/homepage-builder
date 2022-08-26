@@ -16,7 +16,7 @@ import Pagination from "../Pagination";
 import WidgetSearch from "../Search";
 import DeleteModal from "../../common/DeleteModal";
 
-const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) => {
+const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS, formatListItem, formatOptionLabel }: WidgetProps) => {
 	const derivedT = createTranslation(t, {
 		...TRANSLATION_PAIRS_COMMON,
 		...TRANSLATION_PAIRS_WIDGET,
@@ -73,6 +73,8 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 			getCollectionData={getCollectionData}
 			collectionData={collectionData}
 			collectionDataLoading={collectionDataLoading}
+			formatListItem={formatListItem}
+			formatOptionLabel={formatOptionLabel}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}
@@ -110,5 +112,7 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 		</WidgetContextProvider>
 	);
 };
+
+Widget.Table = Table;
 
 export default Widget;

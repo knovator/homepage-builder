@@ -30,7 +30,20 @@ const App = () => {
 				</label>
 			</div>
 			<Provider baseUrl="http://localhost:8080">
-				{selectedType === "widget" && <Widget />}
+				{selectedType === "widget" && (
+					<Widget
+						formatOptionLabel={(code: string, label: any) => (
+							<div>
+								{label?.value}-{label?.label}
+							</div>
+						)}
+						formatListItem={(code: string, label: any) => (
+							<div>
+								{label?.value}-{label?.label}
+							</div>
+						)}
+					/>
+				)}
 				{selectedType === "page" && <Page />}
 			</Provider>
 		</>

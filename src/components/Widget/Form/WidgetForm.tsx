@@ -30,6 +30,8 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		getCollectionData,
 		collectionData,
 		collectionDataLoading,
+		formatListItem,
+		formatOptionLabel,
 	} = useWidgetState();
 	const callerRef = useRef<NodeJS.Timeout | null>(null);
 	const widgetFormRef = useRef<HTMLFormElement | null>(null);
@@ -242,7 +244,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			required: true,
 			accessor: "collectionItems",
 			type: "ReactSelect",
-			options: collectionData.map((item: any) => ({ value: item._id, label: item.name })),
+			options: collectionData.map((item: any) => ({ value: item._id, label: item.name, ...item })),
 			selectedOptions: selectedCollectionItems,
 			isMulti: true,
 			isSearchable: true,
@@ -250,6 +252,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			onSearch: onChangeSearch,
 			isLoading: collectionDataLoading,
 			show: !tilesEnabled,
+			formatOptionLabel: formatOptionLabel,
 		},
 	];
 	const tileFormSchema: SchemaType[] = [
@@ -336,7 +339,11 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					isUpdating={formState === "UPDATE"}
 					watcher={onWidgetFormInputChange}
 				/>
-				<DNDItemsList items={selectedCollectionItems} onDragEnd={onCollectionIndexChange} />
+				<DNDItemsList
+					items={selectedCollectionItems}
+					onDragEnd={onCollectionIndexChange}
+					formatItem={formatListItem}
+				/>
 
 				{tilesEnabled && (
 					<>

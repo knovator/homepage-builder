@@ -1,19 +1,14 @@
 import React from "react";
-import { DragDropContext, Droppable, DropResult, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-interface DNDItemsListProps {
-	onDragEnd: (result: DropResult) => void;
-	items: OptionType[];
-}
-
-const DNDItemsList = ({ onDragEnd, items }: DNDItemsListProps) => {
+const DNDItemsList = ({ onDragEnd, items, formatItem, listCode }: DNDItemsListProps) => {
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Droppable droppableId="droppable">
 				{(droppableProvided) => (
 					<>
 						<div
-							className="space-y-2"
+							className="khb_DND-items"
 							ref={droppableProvided.innerRef}
 							{...droppableProvided.droppableProps}
 						>
@@ -21,19 +16,19 @@ const DNDItemsList = ({ onDragEnd, items }: DNDItemsListProps) => {
 								? items.map((item, index) => (
 										<Draggable key={item.value} draggableId={item.value} index={index}>
 											{(provided) => (
-												<>
-													<div
-														className="khb_widget-new"
-														key={item.value}
-														ref={provided.innerRef}
-														{...provided.draggableProps}
-														{...provided.dragHandleProps}
-													>
-														<p className="text-base font-medium leading-6 text-black truncate">
-															{item.label}
-														</p>
-													</div>
-												</>
+												<div
+													className="khb_DND-item"
+													key={item.value}
+													ref={provided.innerRef}
+													{...provided.draggableProps}
+													{...provided.dragHandleProps}
+												>
+													{typeof formatItem === "function" ? (
+														formatItem(listCode!, item)
+													) : (
+														<p className="khb_DND-item-text">{item.label}</p>
+													)}
+												</div>
 											)}
 										</Draggable>
 								  ))

@@ -386,13 +386,13 @@
     }
     /* \ End of Switch */
 
-    .khb_widgets {
-        @apply space-y-2 p-1;
+    .khb_DND-items {
+        @apply space-y-2;
     }
-    .khb_widget-item {
-        @apply p-2 border-2 border-slate-500 bg-slate-100 rounded-md cursor-grab;
+    .khb_DND-item-text {
+        @apply text-base font-medium leading-6 text-black truncate;
     }
-    .khb_widget-new {
+    .khb_DND-item {
         @apply p-3 overflow-hidden bg-white border rounded-md cursor-pointer border-slate-500 hover:shadow hover:border-blue-400 transition-colors duration-200 ease-in-out;
     }
 }

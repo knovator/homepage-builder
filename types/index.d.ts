@@ -52,6 +52,8 @@ interface WidgetContextType {
 	getCollectionData: (collectionName: string, search?: string) => Promise<void>;
 	collectionDataLoading: boolean;
 	collectionData: any[];
+	formatListItem?: (code: string, data: any) => JSX.Element;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -108,6 +110,12 @@ interface PageContextType {
 // \ End context
 
 // Components
+interface DNDItemsListProps {
+	onDragEnd: (result: DropResult) => void;
+	items: OptionType[];
+	listCode?: string;
+	formatItem?: (code: string, data: any) => JSX.Element;
+}
 interface DrawerProps {
 	children?: React.ReactNode;
 	open: boolean;
@@ -185,6 +193,8 @@ interface ReactSelectProps {
 	isSearchable?: boolean;
 	onSearch?: (text: string) => void;
 	placeholder?: string;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
+	listCode?: string;
 	wrapperClassName?: string;
 }
 interface FormProps {
@@ -220,6 +230,8 @@ interface WidgetProps {
 	t?: any;
 	loader?: any;
 	permissions?: PermissionsObj;
+	formatListItem?: (code: string, data: any) => JSX.Element;
+	formatOptionLabel?: (code: string, data: any) => JSX.Element;
 }
 interface PageProps {
 	t?: any;

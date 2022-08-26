@@ -97,6 +97,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								isLoading={schema.isLoading}
 								placeholder={schema.placeholder}
 								wrapperClassName={schema.wrapperClassName}
+								formatOptionLabel={schema.formatOptionLabel}
 							/>
 						);
 						break;
