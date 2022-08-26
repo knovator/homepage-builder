@@ -6,9 +6,11 @@ import Form from "../../common/Form";
 import ImageUpload from "../../common/ImageUpload";
 import TileItemsAccordian from "./TileItemsAccordian";
 
+import DNDItemsList from "../../common/DNDItemsList";
 import { useWidgetState } from "../../../context/WidgetContext";
 import { useProviderState } from "../../../context/ProviderContext";
 import { capitalizeFirstLetter, changeToCode } from "../../../helper/utils";
+import { DropResult } from "react-beautiful-dnd";
 
 const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	const { baseUrl } = useProviderState();
@@ -69,15 +71,21 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 							: {};
 					}) || [],
 				);
+			} else {
+				setSelectedCollectionItems([]);
 			}
 			if (data?.collectionName !== "Image" && widgetTypes && widgetTypes.length > 0) {
 				setSelectedWidgetType(widgetTypes.find((item) => item.value === data?.collectionName));
 			}
-		} else if (formState === "ADD") {
+		}
+	}, [data, formState, collectionData]);
+
+	useEffect(() => {
+		if (formState === "ADD") {
 			setSelectedCollectionItems([]);
 			setTilesEnabled(true);
 		}
-	}, [data, formState, collectionData]);
+	}, [formState]);
 
 	const onChangeSearch = (str: string) => {
 		if (callerRef.current) clearTimeout(callerRef.current);
@@ -130,6 +138,17 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		}
 		onWidgetFormSubmit(formData);
 	};
+	const onCollectionIndexChange = (result: DropResult) => {
+		const { destination, source } = result;
+		if (destination) {
+			setSelectedCollectionItems((listData) => {
+				let temporaryData = [...listData];
+				const [selectedRow] = temporaryData.splice(source.index, 1);
+				temporaryData.splice(destination.index, 0, selectedRow);
+				return temporaryData;
+			});
+		}
+	};
 
 	// Schemas
 	const widgetFormSchema: SchemaType[] = [
@@ -143,17 +162,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			validations: {
 				required: t("widget.nameRequired"),
 			},
-		},
-		{
-			label: `${t("widget.selectionTitle")}`,
-			accessor: "selectionTitle",
-			required: true,
-			type: "text",
-			onInput: handleCapitalize,
-			placeholder: t("widget.selectionTitlePlaceholder"),
-			validations: {
-				required: t("widget.selectionTitleRequired"),
-			},
+			wrapperClassName: "khb_grid-item-1of2 khb_padding-right-1 khb_align-top",
 		},
 		{
 			label: `${t("widget.code")}`,
@@ -165,6 +174,18 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			placeholder: t("widget.codePlaceholder"),
 			validations: {
 				required: t("widget.codeRequired"),
+			},
+			wrapperClassName: "khb_grid-item-1of2 khb_padding-left-1 khb_align-top khb_margin-top-0",
+		},
+		{
+			label: `${t("widget.selectionTitle")}`,
+			accessor: "selectionTitle",
+			required: true,
+			type: "text",
+			onInput: handleCapitalize,
+			placeholder: t("widget.selectionTitlePlaceholder"),
+			validations: {
+				required: t("widget.selectionTitleRequired"),
 			},
 		},
 		{
@@ -189,28 +210,37 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			options: selectionTypes,
 		},
 		{
+			label: t("widget.autoPlay"),
+			accessor: "autoPlay",
+			type: "checkbox",
+			show: showAutoPlay,
+		},
+		{
 			label: t("widget.webPerRow"),
 			accessor: "webPerRow",
 			type: "number",
 			placeholder: t("widget.webPerRowPlaceholder"),
+			wrapperClassName: "khb_grid-item-1of3 khb_padding-right-1",
 		},
 		{
 			label: t("widget.mobilePerRow"),
 			accessor: "mobilePerRow",
 			type: "number",
 			placeholder: t("widget.mobilePerRowPlaceholder"),
+			wrapperClassName: "khb_grid-item-1of3 khb_padding-right-1 khb_padding-left-1",
 		},
 		{
 			label: t("widget.tabletPerRow"),
 			accessor: "tabletPerRow",
 			type: "number",
 			placeholder: t("widget.tabletPerRowPlaceholder"),
+			wrapperClassName: "khb_grid-item-1of3 khb_padding-left-1",
 		},
 		{
 			label: selectedWidgetType?.label,
 			placeholder: `Select ${selectedWidgetType?.label}...`,
 			required: true,
-			accessor: "items",
+			accessor: "collectionItems",
 			type: "ReactSelect",
 			options: collectionData.map((item: any) => ({ value: item._id, label: item.name })),
 			selectedOptions: selectedCollectionItems,
@@ -220,12 +250,6 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			onSearch: onChangeSearch,
 			isLoading: collectionDataLoading,
 			show: !tilesEnabled,
-		},
-		{
-			label: t("widget.autoPlay"),
-			accessor: "autoPlay",
-			type: "checkbox",
-			show: showAutoPlay,
 		},
 	];
 	const tileFormSchema: SchemaType[] = [
@@ -312,6 +336,7 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 					isUpdating={formState === "UPDATE"}
 					watcher={onWidgetFormInputChange}
 				/>
+				<DNDItemsList items={selectedCollectionItems} onDragEnd={onCollectionIndexChange} />
 
 				{tilesEnabled && (
 					<>

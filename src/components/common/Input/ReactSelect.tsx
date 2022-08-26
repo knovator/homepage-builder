@@ -15,9 +15,10 @@ const CustomReactSelect = ({
 	isSearchable,
 	onSearch,
 	placeholder,
+	wrapperClassName,
 }: ReactSelectProps) => {
 	return (
-		<div>
+		<div className={wrapperClassName}>
 			{label && (
 				<label className="khb_input-label">
 					{label}

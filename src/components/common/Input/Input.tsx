@@ -16,9 +16,10 @@ const Input = ({
 	onBlur,
 	value,
 	onChange,
+	wrapperClassName,
 }: InputProps) => {
 	return (
-		<div>
+		<div className={classNames("khb_input-wrapper", wrapperClassName)}>
 			{label && (
 				<label className="khb_input-label">
 					{label}

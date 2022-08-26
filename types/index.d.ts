@@ -142,6 +142,7 @@ interface InputProps {
 	required?: boolean;
 	disabled?: boolean;
 	rest?: any;
+	wrapperClassName?: string;
 	onInput?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	value?: string | number;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -153,6 +154,7 @@ interface CheckboxProps {
 	error?: string;
 	className?: string;
 	disabled?: boolean;
+	wrapperClassName?: string;
 }
 interface SelectProps {
 	value?: string | number;
@@ -166,6 +168,7 @@ interface SelectProps {
 	id?: string;
 	rest?: any;
 	required?: boolean;
+	wrapperClassName?: string;
 }
 interface ReactSelectProps {
 	onChange?: (opt: { value: string; label: string }[]) => void;
@@ -182,6 +185,7 @@ interface ReactSelectProps {
 	isSearchable?: boolean;
 	onSearch?: (text: string) => void;
 	placeholder?: string;
+	wrapperClassName?: string;
 }
 interface FormProps {
 	open: boolean;
@@ -210,6 +214,7 @@ interface SchemaType extends ReactSelectProps {
 	required?: boolean;
 	onChange?: (e: any) => void;
 	show?: boolean;
+	wrapperClassName?: string;
 }
 interface WidgetProps {
 	t?: any;

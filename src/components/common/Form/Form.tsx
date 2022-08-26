@@ -96,6 +96,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								onSearch={schema.onSearch}
 								isLoading={schema.isLoading}
 								placeholder={schema.placeholder}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -107,6 +108,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								rest={register(schema.accessor, schema.validations || {})}
 								className="block"
 								disabled={isUpdating && typeof schema.editable !== "undefined" && !schema.editable}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -123,6 +125,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 									!enable
 								}
 								required={schema.required}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;
@@ -144,6 +147,7 @@ const Form = forwardRef<HTMLFormElement | null, FormProps>(
 								}
 								required={schema.required}
 								onInput={schema.onInput}
+								wrapperClassName={schema.wrapperClassName}
 							/>
 						);
 						break;

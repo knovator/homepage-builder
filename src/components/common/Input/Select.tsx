@@ -12,9 +12,10 @@ const Select = ({
 	className,
 	disabled,
 	required,
+	wrapperClassName,
 }: SelectProps) => {
 	return (
-		<div>
+		<div className={classNames("khb_input-wrapper", wrapperClassName)}>
 			{label && (
 				<label className="khb_input-label">
 					{label}
