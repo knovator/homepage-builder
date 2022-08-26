@@ -49,6 +49,9 @@ interface WidgetContextType {
 	onImageRemove: (id: string) => Promise<void>;
 	widgetTypes: WidgetType[];
 	selectionTypes: SelectionType[];
+	getCollectionData: (collectionName: string, search?: string) => Promise<void>;
+	collectionDataLoading: boolean;
+	collectionData: any[];
 	// Pagination
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -175,6 +178,10 @@ interface ReactSelectProps {
 	isMulti?: boolean;
 	required?: boolean;
 	selectedOptions?: { value: string; label: string }[];
+	isLoading?: boolean;
+	isSearchable?: boolean;
+	onSearch?: (text: string) => void;
+	placeholder?: string;
 }
 interface FormProps {
 	open: boolean;
@@ -187,7 +194,7 @@ interface InputRendererProps {
 	setError: (msg: string) => void;
 	disabled?: boolean;
 }
-interface SchemaType {
+interface SchemaType extends ReactSelectProps {
 	label?: string;
 	accessor: string;
 	Input?: (props: InputRendererProps) => JSX.Element;
@@ -290,7 +297,8 @@ type ACTION_TYPES =
 	| "TILES"
 	| "PARTIAL_UPDATE"
 	| "WIDGET_TYPES"
-	| "SELECTION_TYPES";
+	| "SELECTION_TYPES"
+	| "COLLECTION_DATA";
 
 interface BaseAPIProps {
 	config?: any;

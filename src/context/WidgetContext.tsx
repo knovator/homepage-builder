@@ -23,6 +23,9 @@ const WidgetContextProvider = ({
 	onImageRemove = async (id: string) => {},
 	widgetTypes = [],
 	selectionTypes = [],
+	getCollectionData = () => Promise.resolve(),
+	collectionDataLoading = false,
+	collectionData = [],
 	// Pagination
 	currentPage = 1,
 	limits = PAGE_LIMITS,
@@ -67,6 +70,9 @@ const WidgetContextProvider = ({
 				onPartialUpdateWidget,
 				widgetTypes,
 				selectionTypes,
+				getCollectionData,
+				collectionDataLoading,
+				collectionData,
 				// Pagination
 				currentPage,
 				limits,

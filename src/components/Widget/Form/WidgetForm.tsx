@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Drawer from "../../common/Drawer";
 import Button from "../../common/Button";
@@ -14,7 +14,6 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	const { baseUrl } = useProviderState();
 	const {
 		t,
-		onWidgetFormSubmit,
 		data,
 		canAdd,
 		canUpdate,
@@ -22,15 +21,23 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 		widgetTypes,
 		selectionTypes,
 		onTileFormSubmit,
+		onWidgetFormSubmit,
 		onDeleteTile,
 		onImageRemove,
 		onImageUpload,
+		getCollectionData,
+		collectionData,
+		collectionDataLoading,
 	} = useWidgetState();
+	const callerRef = useRef<NodeJS.Timeout | null>(null);
+	const widgetFormRef = useRef<HTMLFormElement | null>(null);
+
 	const [webShow, setWebShow] = useState(false);
 	const [mobileShow, setMobileShow] = useState(false);
-	const widgetFormRef = useRef<HTMLFormElement | null>(null);
+	const [tilesEnabled, setTilesEnabled] = useState(true);
 	const [showAutoPlay, setShowAutoPlay] = useState(false);
-	const [showTiles, setShowTiles] = useState(true);
+	const [selectedCollectionItems, setSelectedCollectionItems] = useState<OptionType[]>([]);
+	const [selectedWidgetType, setSelectedWidgetType] = useState<OptionType | undefined>();
 
 	useEffect(() => {
 		if (data && formState === "UPDATE") {
@@ -40,12 +47,45 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 				setShowAutoPlay(false);
 			}
 			if (data?.widgetType === "Image") {
-				setShowTiles(true);
+				setTilesEnabled(true);
 			} else {
-				setShowTiles(false);
+				setTilesEnabled(false);
 			}
+			if (
+				data?.collectionItems &&
+				data?.collectionItems.length > 0 &&
+				collectionData &&
+				collectionData.length > 0
+			) {
+				let item: any;
+				setSelectedCollectionItems(
+					data?.collectionItems?.map((itemId: string) => {
+						item = collectionData.find((item) => item._id === itemId);
+						return item
+							? {
+									label: item.name,
+									value: item._id,
+							  }
+							: {};
+					}) || [],
+				);
+			}
+			if (data?.collectionName !== "Image" && widgetTypes && widgetTypes.length > 0) {
+				setSelectedWidgetType(widgetTypes.find((item) => item.value === data?.collectionName));
+			}
+		} else if (formState === "ADD") {
+			setSelectedCollectionItems([]);
+			setTilesEnabled(true);
 		}
-	}, [data, formState]);
+	}, [data, formState, collectionData]);
+
+	const onChangeSearch = (str: string) => {
+		if (callerRef.current) clearTimeout(callerRef.current);
+
+		callerRef.current = setTimeout(() => {
+			getCollectionData(selectedWidgetType!.value, str);
+		}, 300);
+	};
 
 	// Form Utility Functions
 	function handleCapitalize(event: React.ChangeEvent<HTMLInputElement>) {
@@ -61,14 +101,34 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 	const onWidgetFormSubmitClick = () => {
 		widgetFormRef.current?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
 	};
-	const onWidgetFormInputChange = (value: any, name: string | undefined) => {
-		if (name === "selectionType") {
-			if (value["selectionType"] === "Carousel") setShowAutoPlay(true);
-			else setShowAutoPlay(false);
-		} else if (name === "widgetType") {
-			if (value["widgetType"] === "Image") setShowTiles(true);
-			else setShowTiles(false);
+	const onWidgetFormInputChange = useCallback(
+		(value: any, name: string | undefined) => {
+			if (name === "selectionType") {
+				if (value["selectionType"] === "Carousel") setShowAutoPlay(true);
+				else setShowAutoPlay(false);
+			} else if (name === "widgetType") {
+				if (value["widgetType"] === "Image") {
+					setSelectedWidgetType(undefined);
+					setTilesEnabled(true);
+				} else {
+					let selectedWType = widgetTypes.find((wType) => wType.value === value["widgetType"]);
+					setSelectedWidgetType(selectedWType);
+					getCollectionData(value["widgetType"]);
+					setTilesEnabled(false);
+				}
+			}
+		},
+		[widgetTypes],
+	);
+	const onFormSubmit = (data: any) => {
+		let formData = { ...data };
+		if (selectedWidgetType && formState === "ADD") {
+			formData.collectionName = selectedWidgetType.value;
 		}
+		if (Array.isArray(selectedCollectionItems) && selectedCollectionItems.length > 0) {
+			formData.collectionItems = selectedCollectionItems.map((item) => item.value);
+		}
+		onWidgetFormSubmit(formData);
 	};
 
 	// Schemas
@@ -145,6 +205,21 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			accessor: "tabletPerRow",
 			type: "number",
 			placeholder: t("widget.tabletPerRowPlaceholder"),
+		},
+		{
+			label: selectedWidgetType?.label,
+			placeholder: `Select ${selectedWidgetType?.label}...`,
+			required: true,
+			accessor: "items",
+			type: "ReactSelect",
+			options: collectionData.map((item: any) => ({ value: item._id, label: item.name })),
+			selectedOptions: selectedCollectionItems,
+			isMulti: true,
+			isSearchable: true,
+			onChange: setSelectedCollectionItems,
+			onSearch: onChangeSearch,
+			isLoading: collectionDataLoading,
+			show: !tilesEnabled,
 		},
 		{
 			label: t("widget.autoPlay"),
@@ -231,14 +306,14 @@ const WidgetForm = ({ onClose, open, formState }: FormProps) => {
 			<div className="khb_form">
 				<Form
 					schema={widgetFormSchema}
-					onSubmit={onWidgetFormSubmit}
+					onSubmit={onFormSubmit}
 					ref={widgetFormRef}
 					data={data}
 					isUpdating={formState === "UPDATE"}
 					watcher={onWidgetFormInputChange}
 				/>
 
-				{showTiles && (
+				{tilesEnabled && (
 					<>
 						{/* Web Items */}
 						<TileItemsAccordian

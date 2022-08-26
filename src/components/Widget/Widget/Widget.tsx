@@ -38,6 +38,9 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 		onPartialUpdateWidget,
 		widgetTypes,
 		selectionTypes,
+		getCollectionData,
+		collectionData,
+		collectionDataLoading,
 		// Pagination
 		totalPages,
 		totalRecords,
@@ -67,6 +70,9 @@ const Widget = ({ t, loader, permissions = DEFAULT_PERMISSIONS }: WidgetProps) =
 			onPartialUpdateWidget={onPartialUpdateWidget}
 			widgetTypes={widgetTypes}
 			selectionTypes={selectionTypes}
+			getCollectionData={getCollectionData}
+			collectionData={collectionData}
+			collectionDataLoading={collectionDataLoading}
 			// Pagination
 			totalPages={totalPages}
 			totalRecords={totalRecords}

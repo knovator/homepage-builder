@@ -31,6 +31,10 @@ const apiList = {
 		url: `${prefix}/${id}`,
 		method: "GET",
 	}),
+	COLLECTION_DATA: ({ prefix }: API_INPUT_TYPE) => ({
+		url: `${prefix}/collection-data`,
+		method: "POST",
+	}),
 
 	// Image Upload API
 	IMAGE_UPLOAD: ({ prefix }: API_INPUT_TYPE) => ({

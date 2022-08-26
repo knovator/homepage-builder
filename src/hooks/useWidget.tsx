@@ -22,6 +22,8 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 	const [formState, setFormState] = useState<FormActionTypes>();
 	const [widgetTypes, setWidgetTypes] = useState<WidgetType[]>([]);
 	const [selectionTypes, setSelectionTypes] = useState<SelectionType[]>([]);
+	const [collectionDataLoading, setCollectionDataLoading] = useState<boolean>(false);
+	const [collectionData, setCollectionData] = useState<any[]>([]);
 
 	const { baseUrl, token, onError, onSuccess, onLogout, widgetRoutesPrefix, tilesRoutesPrefix } = useProviderState();
 	const { setPageSize, pageSize, currentPage, setCurrentPage, filter } = usePagination({ defaultLimit });
@@ -216,6 +218,26 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		}
 		setLoading(false);
 	};
+	const getCollectionData = async (collectionName: string, search?: string) => {
+		setCollectionDataLoading(true);
+		let api = getApiType({ routes, action: "COLLECTION_DATA", prefix: widgetRoutesPrefix, id: collectionName });
+		let response = await request({
+			baseUrl,
+			token,
+			method: api.method,
+			url: api.url,
+			onError: handleError(CALLBACK_CODES.GET_ALL),
+			data: {
+				search: search || "",
+				collectionName,
+			},
+		});
+		if (response?.code === "SUCCESS") {
+			setCollectionDataLoading(false);
+			return setCollectionData(paginationDataGatter(response));
+		}
+		setCollectionDataLoading(false);
+	};
 	// Form operations
 	const onWidgetFormSubmit = async (data: any) => {
 		setLoading(true);
@@ -255,7 +277,8 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		}
 		// get Tile data if widget is updating
 		if (state === "UPDATE" && data) {
-			getTiles(data._id);
+			if (data.widgetType !== "Image" && data.collectionName) getCollectionData(data.collectionName);
+			else getTiles(data._id);
 		} else if (state === "ADD") {
 			// reset Tile data if widget is adding
 			setTilesList({ web: [], mobile: [] });
@@ -374,12 +397,15 @@ const useWidget = ({ defaultLimit, routes, preConfirmDelete }: UseWidgetProps) =
 		onImageRemove,
 		widgetTypes,
 		selectionTypes,
+		collectionDataLoading,
+		getCollectionData,
+		collectionData,
 
 		// Tiles
 		tilesList,
 		tilesLoading,
 		onTileFormSubmit,
 	};
-};;;
+};
 
 export default useWidget;

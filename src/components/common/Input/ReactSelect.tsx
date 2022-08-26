@@ -11,6 +11,10 @@ const CustomReactSelect = ({
 	isMulti,
 	selectedOptions = [],
 	required,
+	isLoading,
+	isSearchable,
+	onSearch,
+	placeholder,
 }: ReactSelectProps) => {
 	return (
 		<div>
@@ -28,6 +32,10 @@ const CustomReactSelect = ({
 				className={classNames(className)}
 				isMulti={isMulti}
 				options={options}
+				isSearchable={isSearchable}
+				isLoading={isLoading}
+				onKeyDown={(e) => onSearch && onSearch((e.target as HTMLInputElement).value)}
+				placeholder={placeholder}
 			/>
 			{error && <p className="khb_input-error ">{error}</p>}
 		</div>
